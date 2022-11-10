@@ -3,35 +3,18 @@
     height: 100vh;
     width: 100%;
 }
-button{
-    width: 100%;
+.divider:after,
+.divider:before {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #eee;
 }
-.seperator {
-    float: left;
-    width: 100%;
-    border-top: 1px solid #ccc;
-    text-align: center;
-    margin: 50px 0 0;
+.h-custom {
+  height: calc(100% - 73px);
+}
+@media (max-width: 450px) {
+  .h-custom {
+    height: 100%;
   }
- .seperator b {
-    width: 40px;
-    height: 40px;
-    font-size: 16px;
-    text-align: center;
-    line-height: 40px;
-    background: #fff;
-    display: inline-block;
-    border: 1px solid #e0e0e0;
-    border-radius: 50%;
-    position: relative;
-    top: -22px;
-    z-index: 1;
-  }
-
-  .social-icon {
-    width: 100%;
-    font-size: 20px;
-    padding-top: 20px;
-    color: #fff;
-    text-align: center;
 }

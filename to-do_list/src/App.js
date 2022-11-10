@@ -4,7 +4,7 @@ import './../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import Sidebar from './component/sidebar/Sidebar';
-import {SignIn, SignUp, Index} from './pages/index';
+import {SignIn, SignUp, Index, Profile} from './pages/index';
 
 
 function App() {
@@ -15,6 +15,7 @@ function App() {
           <Routes>
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
+          <Route path="/profile" element={<Profile />} />
           {/* <React.Fragment>
           <div className='row'>
             <div className='col-2'><Sidebar /></div>
