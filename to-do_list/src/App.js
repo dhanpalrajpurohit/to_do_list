@@ -5,7 +5,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import Sidebar from './component/sidebar/Sidebar';
 import {SignIn, SignUp, Index, Profile} from './pages/index';
-
+import {Popup} from './component/index';
 
 function App() {
 
@@ -16,6 +16,7 @@ function App() {
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/popup" element={<Popup />} />
           {/* <React.Fragment>
           <div className='row'>
             <div className='col-2'><Sidebar /></div>
