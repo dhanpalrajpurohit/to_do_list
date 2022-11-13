@@ -48,11 +48,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["name", "tc"]
 
-    def __int__(self):
-        return self.email
-
     def __str__(self):
-        return self.email
+        return str(self.email)
 
     def has_perm(self, perm, obj=None):
         return self.is_admin
@@ -73,11 +70,11 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
 
 class UserProfile(models.Model):
     GENDER = (
-        ('M', 'Male'),
-        ('F', 'Female'),
-        ('O', 'Other'),
+        ('Male', 'Male'),
+        ('Female', 'Female'),
+        ('Other', 'Other'),
     )
-    email = models.ForeignKey(User, on_delete=models.CASCADE)
+    email = models.OneToOneField(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     gender = models.CharField(max_length=6, choices=GENDER)
     occupation = models.CharField(max_length=100)
