@@ -1,3 +1,6 @@
 venv/
 .env
 .idea/
+userAccounts/*/*.pyc
+.gitignore
+*/*/*.pyc
