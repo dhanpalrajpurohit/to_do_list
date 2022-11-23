@@ -16,16 +16,9 @@ function App() {
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/dashboard" element={<Dashboard/>} />
+          <Route path="/" element={<Index/>} />
           <Route path="/popup" element={<Popup />} />
-          {/* <React.Fragment>
-          <div className='row'>
-            <div className='col-2'><Sidebar /></div>
-            <div className='col-9'>
-              <Route path="/dashboard" element={<Index />} />
-            </div>
-          </div>
-          </React.Fragment> */}
+          <Route path="/dashboard" element={<Dashboard />} />
           </Routes>
       </BrowserRouter>
     </div>

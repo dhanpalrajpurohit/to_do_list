@@ -25,7 +25,7 @@ function Sidebar({ children }) {
         },
         {
             path: "/about",
-            name: "About",
+            name: "To Do List",
             icon: <FaUserAlt />
         },
         {
@@ -50,15 +50,15 @@ function Sidebar({ children }) {
         }
     ]
     return (
-        <div className="container bg-light p-1" style={{ height: '100vh' }}>
-            <div className="container">
+        <div className="bg-light p-1" style={{ height: '100vh' }}>
+            <div className='navbar-brand'>
                 <a className="navbar-brand" href="#">
-                    <img src={logo} alt="" className="img-fluid" height={40} width={40}/><span className='fw-bold h5 p-2'>Planner</span>
+                        <img src={logo} alt="" className="img-fluid" height={40} width={40}/><span className='fw-bold h5 p-2'>Planner</span>
                 </a>
             </div>
             <div>
                 <ul className='nav w-100'>
-                    <li className="nav-item">
+                    <li className="nav-item p-2">
                         {
                             menuItem.map((item, index) => (
                                 <NavLink to={item.path} key={index} className='nav-link'>

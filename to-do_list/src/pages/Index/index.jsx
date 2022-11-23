@@ -3,6 +3,9 @@ import './index.css';
 
 import List from '../../component/list/List';
 import Header from '../../component/header/Header';
+import { Sidebar } from '../../component';
+import Dashboard from '../Dashboard/Dashboard';
+import Notes from './index';
 
 function Index() {
   let [todos, setTodos] = React.useState([]);
@@ -28,8 +31,13 @@ function Index() {
   }
 
   return (
-    <div>
-      <div className="container-fluid">
+    <div className='row'>
+      <div className='col-2'>
+      <Sidebar/>
+      </div>
+      <Dashboard />
+      <Notes />
+      {/* <div className="container-fluid col">
         <div className="row">
           <div className="col-sm-6 text-white mx-auto shadow-lg m-3">
             <h2 className='text-center'>Today's Plan</h2>
@@ -54,7 +62,7 @@ function Index() {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }
