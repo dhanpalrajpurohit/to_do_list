@@ -21,23 +21,23 @@ import MDBox from "components/MDBox";
 
 // Material Dashboard 2 React examples
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
-import DashboardNavbar from "examples/Navbars/DashboardNavbar";
+// import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
-import MasterCard from "examples/Cards/MasterCard";
-import DefaultInfoCard from "examples/Cards/InfoCards/DefaultInfoCard";
+// import MasterCard from "examples/Cards/MasterCard";
+// import DefaultInfoCard from "examples/Cards/InfoCards/DefaultInfoCard";
 
 // Billing page components
-import PaymentMethod from "layouts/billing/components/PaymentMethod";
-import Invoices from "layouts/billing/components/Invoices";
+// import PaymentMethod from "layouts/billing/components/PaymentMethod";
+// import Invoices from "layouts/billing/components/Invoices";
 import BillingInformation from "layouts/billing/components/BillingInformation";
-import Transactions from "layouts/billing/components/Transactions";
+// import Transactions from "layouts/billing/components/Transactions";
 
 function Billing() {
   return (
     <DashboardLayout>
-      <DashboardNavbar absolute isMini />
-      <MDBox mt={8}>
-        <MDBox mb={3}>
+      {/* <DashboardNavbar absolute isMini /> */}
+      <MDBox>
+        {/* <MDBox mb={3}>
           <Grid container spacing={3}>
             <Grid item xs={12} lg={8}>
               <Grid container spacing={3}>
@@ -69,15 +69,15 @@ function Billing() {
               <Invoices />
             </Grid>
           </Grid>
-        </MDBox>
+        </MDBox> */}
         <MDBox mb={3}>
           <Grid container spacing={3}>
             <Grid item xs={12} md={7}>
               <BillingInformation />
             </Grid>
-            <Grid item xs={12} md={5}>
+            {/* <Grid item xs={12} md={5}>
               <Transactions />
-            </Grid>
+            </Grid> */}
           </Grid>
         </MDBox>
       </MDBox>

@@ -12,6 +12,8 @@ Coded by www.creative-tim.com
 
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
+import React from "react";
+import { Dialog, DialogContent, DialogTitle, TextField } from "@mui/material";
 
 // prop-types is a library for typechecking of props
 import PropTypes from "prop-types";
@@ -30,6 +32,18 @@ import { useMaterialUIController } from "context";
 function Bill({ name, company, email, vat, noGutter }) {
   const [controller] = useMaterialUIController();
   const { darkMode } = controller;
+
+  const [open, setOpen] = React.useState(false);
+  // const [selectedValue, setSelectedValue] = React.useState("");
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    // setSelectedValue(value);
+  };
 
   return (
     <MDBox
@@ -64,6 +78,9 @@ function Bill({ name, company, email, vat, noGutter }) {
             <MDButton variant="text" color={darkMode ? "white" : "dark"}>
               <Icon>edit</Icon>&nbsp;edit
             </MDButton>
+            <MDButton variant="text" color={darkMode ? "white" : "dark"} onClick={handleClickOpen}>
+              <Icon>sendIcon</Icon>&nbsp;share
+            </MDButton>
           </MDBox>
         </MDBox>
         <MDBox mb={1} lineHeight={0}>
@@ -82,6 +99,30 @@ function Bill({ name, company, email, vat, noGutter }) {
             </MDTypography>
           </MDTypography>
         </MDBox>
+        <Dialog onClose={handleClose} open={open}>
+          <DialogTitle>Set backup account</DialogTitle>
+          <DialogContent>
+            <TextField
+              hiddenLabel
+              id="filled-hidden-label-normal"
+              defaultValue="Normal"
+              variant="filled"
+            />
+            <TextField
+              hiddenLabel
+              id="filled-hidden-label-normal"
+              defaultValue="Normal"
+              variant="filled"
+            />
+            <TextField
+              hiddenLabel
+              id="filled-hidden-label-normal"
+              defaultValue="Normal"
+              variant="filled"
+            />
+          </DialogContent>
+        </Dialog>
+
         <MDTypography variant="caption" color="text">
           VAT Number:&nbsp;&nbsp;&nbsp;
           <MDTypography variant="caption" fontWeight="medium">
