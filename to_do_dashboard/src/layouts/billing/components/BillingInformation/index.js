@@ -15,6 +15,8 @@ Coded by www.creative-tim.com
 
 // @mui material components
 import Card from "@mui/material/Card";
+import MDButton from "components/MDButton";
+import Icon from "@mui/material/Icon";
 
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
@@ -28,7 +30,17 @@ function BillingInformation() {
     <Card id="delete-account">
       <MDBox pt={3} px={2}>
         <MDTypography variant="h6" fontWeight="medium">
-          Billing Information
+          Available Notes
+          <MDButton
+            variant="text"
+            color="success"
+            display="flex"
+            alignItems="center"
+            mt={{ xs: 2, sm: 0 }}
+            ml={{ xs: -1.5, sm: 0 }}
+          >
+            <Icon>add</Icon>&nbsp;Create New Note
+          </MDButton>
         </MDTypography>
       </MDBox>
       <MDBox pt={1} pb={2} px={2}>
