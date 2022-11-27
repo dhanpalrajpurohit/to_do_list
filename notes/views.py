@@ -10,14 +10,18 @@ from .serializers import NotesSerializer
 
 class NotesList(APIView):
     def get(self, request):
-        notes = NotesModel.objects.get()
+        notes = NotesModel.objects.all()
         serializer = NotesSerializer(notes)
         serializer.is_valid(raise_exception=True)
         return JsonResponse({"data": serializer.data}, status=200)
 
     def post(self, request):
+        if not request.session.session_key:
+            request.session.create()
         note_serializer = NotesSerializer(data=request.data)
         note_serializer.is_valid(raise_exception=True)
+        note_serializer.save()
+        note_serializer.session = request.session.session_key
         note_serializer.save()
         return JsonResponse({"data": note_serializer.data}, status=200)
 

@@ -6,5 +6,6 @@ from .models import Notes as NotesModel
 class NotesSerializer(serializers.ModelSerializer):
     class Meta:
         model = NotesModel
-        fields = '__all__'
+        fields = ('title', 'description', 'session')
+
 

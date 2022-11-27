@@ -57,10 +57,10 @@ function Bill({ title, description }) {
                 <Icon>delete</Icon>&nbsp;delete
               </MDButton>
             </MDBox>
-            <MDButton variant="text" color={darkMode ? "white" : "dark"}>
+            <MDButton variant="text" color={darkMode ? "white" : "dark"} onClick={handleClickOpen}>
               <Icon>edit</Icon>&nbsp;edit
             </MDButton>
-            <MDButton variant="text" color={darkMode ? "white" : "dark"} onClick={handleClickOpen}>
+            <MDButton variant="text" color={darkMode ? "white" : "dark"}>
               <Icon>sendIcon</Icon>&nbsp;share
             </MDButton>
           </MDBox>

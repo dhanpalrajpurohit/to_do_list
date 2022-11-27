@@ -1,7 +1,7 @@
 from django.urls import path
-from userAccounts.views import *
+from .views import Notes, NotesList
 
 urlpatterns = [
-    path('notes/', UserRegistrationView.as_view(), name='register'),
-    path('notes/<int:pk>/', UserLoginView.as_view(), name='login'),
+    path('notes/', NotesList.as_view(), name='get-notes'),
+    path('notes/<str:token>/', Notes.as_view(), name='get-note'),
 ]

@@ -1,26 +1,10 @@
 import React from 'react'
+import { Dialog, DialogContent, DialogTitle, DialogActions, Divider } from "@mui/material";
 
-function SimpleDialog(props) {
-    const { onClose, selectedValue, open } = props;
-
-    const handleClose = () => {
-        onClose(selectedValue);
-    };
-
-    const handleListItemClick = (value) => {
-        onClose(value);
-    };
-
-    return (
-        <Dialog onClose={handleClose} open={open}>
-            <DialogTitle>Set backup account</DialogTitle>
-        </Dialog>
-    );
-}
 
 function SampleDialog() {
     const [open, setOpen] = React.useState(false);
-    const [selectedValue, setSelectedValue] = React.useState(emails[1]);
+    const [selectedValue, setSelectedValue] = React.useState("");
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -31,10 +15,31 @@ function SampleDialog() {
         setSelectedValue(value);
     };
     return (
-        <div>
-            
-        </div>
-    )
+        <Dialog onClose={handleClose} open={open} minWidth="lg">
+          <DialogTitle>
+            <MDTypography variant="caption" fontWeight="medium" textTransform="capitalize">
+              {/* Add Note and Share on Social Media */}
+              {title}
+            </MDTypography>
+          </DialogTitle>
+          <DialogContent>
+            <Divider />
+            {/* <MDBox mt={1}>
+              <MDBox mb={2}>
+                <MDInput type="text" label="Title" fullWidth />
+              </MDBox>
+              <MDBox>
+                <MDInput type="text" label="Description" fullWidth multiline />
+              </MDBox>
+            </MDBox> */}
+            {children}
+          </DialogContent>
+          <DialogActions>
+            <MDButton onClick={handleClose} color="primary">Cancel</MDButton>
+            <MDButton onClick={handleClose}>Save</MDButton>
+          </DialogActions>
+        </Dialog>
+    );
 }
 
 export default Dialog
