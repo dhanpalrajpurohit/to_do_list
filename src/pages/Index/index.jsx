@@ -37,13 +37,14 @@ function Index() {
   const handleComplete = (id) => {
     const list = todoList.filter((task) => task.id !== id);
     setTodoList(list);
-    if (todoList.length == 0){
+    if (todoList.length == 0) {
       setShowInputText(false);
     }
   };
 
   return (
     <div>
+      <Header />
       <div className="container-fluid">
         <div className="row">
           <div className="col-sm-6 text-white mx-auto m-3">
@@ -56,27 +57,21 @@ function Index() {
                     <ul className='list-group'>
                       {todoList.map((todo, index) => {
                         return (
-                          <li key={index} className="row">
-                            <div class="form-check col-9">
+                          <li key={index} className="row shadow-sm">
+                            <div class="form-check col-9 m-3">
                               <input class="form-check-input pt-1" type="checkbox" value="" id="flexCheckDefault" />
                               <label class="form-check-label pt-1 card-subtitle form-check-label border-0 text-dark" for="flexCheckDefault">
-                              {todo.task}
+                                {todo.task}
                               </label>
                             </div>
                             <button className='btn justify-content-right col-auto' onClick={() => handleComplete(todo.id)}><Trash2Fill /></button>
-
-                            {/* <div id="social-icons" className='d-flex flex-row form-check align-middle'>
-                              <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked />
-                              <h6 class="card-subtitle form-check-label border-0 text-primary text-dark list-group-item w-100" id="flexCheckChecked">{todo.task}</h6>
-                              <div className="mx-1"><button className='btn justify-content-right' onClick={() => handleComplete(todo.id)}><Trash2Fill /></button></div>
-                            </div> */}
                           </li>
                         )
                       })}
                     </ul>
-                    {showInputText && <div className='d-flex flex-row input-group p-2 mt-2 border border-1 rounded'>
-                      <input type="text" value={value} class="card-subtitle border border-0 mb-2 form-control text-dark list-group-item" placeholder='Enter Text Here..' onChange={(e) => setValue(e.target.value)} />
-                      <div className="mx-1"><button className='btn justify-content-right input-group-text text-primary p-1' onClick={() => handleClick()}><SendFill /></button></div>
+                    {showInputText && <div class="input-group mt-3">
+                      <input type="text" value={value} class="form-control text-dark" placeholder="Enter here..." aria-describedby="button-addon2" onChange={(e) => setValue(e.target.value)}/>
+                        <button class="btn btn-outline-primary" type="button" id="button-addon2" onClick={() => handleClick()}><SendFill /></button>
                     </div>}
                   </div>
                 </div>
