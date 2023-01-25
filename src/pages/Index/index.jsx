@@ -21,7 +21,7 @@ function Index() {
 
   const handleClick = () => {
     const id = todoList.length + 1;
-    if(value!=""){
+    if (value != "") {
       setTodoList((prev) => [
         ...prev,
         {
@@ -37,6 +37,9 @@ function Index() {
   const handleComplete = (id) => {
     const list = todoList.filter((task) => task.id !== id);
     setTodoList(list);
+    if (todoList.length == 0){
+      setShowInputText(false);
+    }
   };
 
   return (
@@ -53,11 +56,20 @@ function Index() {
                     <ul className='list-group'>
                       {todoList.map((todo, index) => {
                         return (
-                          <li key={index}>
-                            <div id="social-icons" className='d-flex flex-row'>
-                              <h6 class="card-subtitle border-0 mb-2 text-primary text-dark list-group-item w-100">{todo.task}</h6>
-                              <div className="mx-1"><button className='btn justify-content-right' onClick={() => handleComplete(todo.id)}><Trash2Fill /></button></div>
+                          <li key={index} className="row">
+                            <div class="form-check col-9">
+                              <input class="form-check-input pt-1" type="checkbox" value="" id="flexCheckDefault" />
+                              <label class="form-check-label pt-1 card-subtitle form-check-label border-0 text-dark" for="flexCheckDefault">
+                              {todo.task}
+                              </label>
                             </div>
+                            <button className='btn justify-content-right col-auto' onClick={() => handleComplete(todo.id)}><Trash2Fill /></button>
+
+                            {/* <div id="social-icons" className='d-flex flex-row form-check align-middle'>
+                              <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked />
+                              <h6 class="card-subtitle form-check-label border-0 text-primary text-dark list-group-item w-100" id="flexCheckChecked">{todo.task}</h6>
+                              <div className="mx-1"><button className='btn justify-content-right' onClick={() => handleComplete(todo.id)}><Trash2Fill /></button></div>
+                            </div> */}
                           </li>
                         )
                       })}
