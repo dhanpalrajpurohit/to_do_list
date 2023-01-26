@@ -5,10 +5,15 @@ import { Trash2Fill, SendFill, PlusCircleFill } from 'react-bootstrap-icons';
 import List from '../../component/list/List';
 import Header from '../../component/header/Header';
 
+const intial_task = [
+  {
+    "task": "meditation"
+  }
+]
 
 function Index() {
   let [showInputText, setShowInputText] = React.useState(false);
-  const [todoList, setTodoList] = React.useState([]);
+  const [todoList, setTodoList] = React.useState(intial_task);
   let [value, setValue] = React.useState();
 
   let newDate = new Date();
