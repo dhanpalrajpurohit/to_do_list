@@ -1,0 +1,9 @@
+.header{
+    background-color:#3b5998!important;
+    width: 100%;
+}
+.container{
+    max-width: none;
+    margin: 0;
+    padding: 0;
+}
