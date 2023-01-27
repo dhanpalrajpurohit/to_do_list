@@ -1,5 +1,5 @@
 import React from 'react';
-
+import './Profile.css';
 import Header from '../../component/header/Header';
 
 
@@ -7,7 +7,7 @@ function Profile() {
     return (
         <div>
             <Header />
-            <div>
+            <div className='profile'>
                 <div className="row">
                     <div className="col-sm-6 text-white mx-auto m-3">
                         <div className="container">
@@ -15,7 +15,7 @@ function Profile() {
                                 <div class="card-body">
                                     <h5 class="card-header">Profile</h5>
                                     <div className='w-100'>
-                                    <img class="rounded-circle mx-auto d-block" src="https://www.pngitem.com/pimgs/m/78-786293_1240-x-1240-0-avatar-profile-icon-png.png" alt="Card image cap" height={100}/>
+                                    <img class="rounded-circle mx-auto d-block" src="https://www.pngitem.com/pimgs/m/78-786293_1240-x-1240-0-avatar-profile-icon-png.png" alt="profile" height={100}/>
                                     </div>
                                     <h6 className='text-muted text-center'>Dhanpal Rajpurohit</h6>
                                     <div className='p-3 '>
@@ -30,10 +30,6 @@ function Profile() {
                                             </div>
                                             <button type="submit" class="btn btn-primary m-3">update</button>
                                         </form>
-                                        {/* {showInputText && <div class="input-group mt-3">
-                                            <input type="text" value={value} class="form-control text-dark" placeholder="Enter here..." aria-describedby="button-addon2" onChange={(e) => setValue(e.target.value)} />
-                                            <button class="btn btn-outline-primary" type="button" id="button-addon2" onClick={() => handleClick()}><SendFill /></button>
-                                        </div>} */}
                                     </div>
                                 </div>
                             </div>

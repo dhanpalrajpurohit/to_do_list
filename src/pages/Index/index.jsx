@@ -1,8 +1,8 @@
 import React from 'react';
 import './index.css';
 
-import { Trash2Fill, SendFill, PlusCircleFill } from 'react-bootstrap-icons';
-import List from '../../component/list/List';
+import { Trash2Fill, SendFill } from 'react-bootstrap-icons';
+// import List from '../../component/list/List';
 import Header from '../../component/header/Header';
 
 const intial_task = [
@@ -26,7 +26,7 @@ function Index() {
 
   const handleClick = () => {
     const id = todoList.length + 1;
-    if (value != "") {
+    if (value !== "") {
       setTodoList((prev) => [
         ...prev,
         {
@@ -42,7 +42,7 @@ function Index() {
   const handleComplete = (id) => {
     const list = todoList.filter((task) => task.id !== id);
     setTodoList(list);
-    if (todoList.length == 0) {
+    if (todoList.length === 0) {
       setShowInputText(false);
     }
   };
@@ -69,14 +69,14 @@ function Index() {
                                 {todo.task}
                               </label>
                             </div>
-                            <button className='btn justify-content-right col-auto' onClick={() => handleComplete(todo.id)}><Trash2Fill /></button>
+                            <button className='btn justify-content-right col-auto' onClick={() => handleComplete(todo.id)}><Trash2Fill className='global-icons-color'/></button>
                           </li>
                         )
                       })}
                     </ul>
                     {showInputText && <div class="input-group mt-3">
                       <input type="text" value={value} class="form-control text-dark" placeholder="Enter here..." aria-describedby="button-addon2" onChange={(e) => setValue(e.target.value)}/>
-                        <button class="btn btn-outline-primary" type="button" id="button-addon2" onClick={() => handleClick()}><SendFill /></button>
+                        <button class="btn" type="button" onClick={() => handleClick()}><SendFill  className='global-icons-color' /></button>
                     </div>}
                   </div>
                 </div>
