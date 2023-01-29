@@ -26,7 +26,6 @@ function Header() {
                             <li><Link to="/" class="dropdown-item">Sign-Out</Link></li>
                         </ul>
                     </div>
-                    {/* <Link to="/profile" className='btn btn-light me-1 fw-bold rounded-circle h-auto'>D</Link> */}
                 </nav>
             </div>
         </div>

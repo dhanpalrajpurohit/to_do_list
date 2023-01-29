@@ -1,9 +1,12 @@
-import React from 'react';
+import React, {useEffect} from 'react';
+import { Navigate, useNavigate } from 'react-router-dom';
+
 import './index.css';
 
 import { Trash2Fill, SendFill } from 'react-bootstrap-icons';
 // import List from '../../component/list/List';
 import Header from '../../component/header/Header';
+import {axiosInstance} from '../../Axios.jsx';
 
 const intial_task = [
   {
@@ -22,7 +25,7 @@ function Index() {
   let date = newDate.getDate();
   let month = newDate.getMonth() + 1;
   let day = newDate.getDay() + 1;
-  let year = newDate.getFullYear()
+  let year = newDate.getFullYear();
 
   const handleClick = () => {
     const id = todoList.length + 1;
@@ -46,6 +49,19 @@ function Index() {
       setShowInputText(false);
     }
   };
+
+  useEffect(() => {
+    axiosInstance({
+      url: "get-token/",
+      method: "POST",
+      data: details,
+    }).then((response) => {
+      const data = response.data;
+      const token = data.token;
+      localStorage.setItem('token',token)
+      Navigate("/dashboard");
+   });
+  });
 
   return (
     <div>

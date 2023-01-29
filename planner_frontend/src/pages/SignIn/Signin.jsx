@@ -6,11 +6,11 @@ import {isEmail, isEmpty, isContainWhiteSpace, isLength, isPassword} from "../..
 import HelpBlock from '../../component/helpblock/HelpBlock';
 
 import {axiosInstance} from '../../Axios.jsx';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 function SignIn() {
-  const [details, setDetails] = React.useState({ "email": "", "password": "" });
-  const [error, setError] = React.useState({ "email": "", "password": "" });
+  const [details, setDetails] = React.useState({ "username": "", "password": "" });
+  const [error, setError] = React.useState({ "username": "", "password": "" });
   let navigate = useNavigate();
 
 
@@ -22,25 +22,33 @@ function SignIn() {
     }
     else{
       axiosInstance({
-        url: "accounts/login/",
+        url: "get-token/",
         method: "POST",
         data:details,
       }).then((response) => {
         const data = response.data;
         const token = data.token;
         localStorage.setItem('token',token)
-        navigate("/dashboard");
+        return axiosInstance({
+          url: "signin/",
+          method: "POST",
+          headers: "token "+localStorage.getItem('token'),
+          data:details,
+        }).then((response) => {
+          console.log(response);
+          Navigate('/dashboard');
+       });
      });
       
     }
   }
 
   const validateLoginForm = e => {
-    if (isEmpty(details.email)) {
-      setError({...error,"email":"Email can't be blank"});
+    if (isEmpty(details.username)) {
+      setError({...error,"username":"Email can't be blank"});
       return false;
-    } else if (!isEmail(details.email)) {
-      setError({...error,"email":"Please enter a valid email"});
+    } else if (!isEmail(details.username)) {
+      setError({...error,"username":"Please enter a valid email"});
       return false;
     }
 
@@ -101,24 +109,24 @@ function SignIn() {
       <div className='container p-5'>
         <div className='row p-5'>
             <div className='col-md-6'>
-                <img src="https://preview.colorlib.com/theme/bootstrap/login-form-07/images/undraw_remotely_2j6y.svg" className="img-fluid" height="80%" width="80%" />
+                <img src="https://preview.colorlib.com/theme/bootstrap/login-form-07/images/undraw_remotely_2j6y.svg" className="img-fluid" alt="login" height="80%" width="80%" />
             </div>
             <div className='col-md-6'>
                 <div>
                     <h3>Sign In</h3>
                     <div>
-                        <form className="w-75">
+                        <form className="w-75" onSubmit={submitHandler}>
                             <div className="form-group mb-3">
-                                <label for="username">Username</label>
-                                <input type="text" className="form-control" id="username" placeholder='Username'/>
+                                <label htmlFor="username">Email Address</label>
+                                <input type="email" className="form-control" placeholder='Email Address' id="txt_email" onChange={e => setDetails({ ...details, "username": e.target.value })}/>
                             </div>
                             <div className="form-group mb-3">
-                                <label for="password">Password</label>
-                                <input type="password" className="form-control" id="password" placeholder='Password'/>
+                                <label htmlFor="password">Password</label>
+                                <input type="password" className="form-control" placeholder='Password' id="txt_password" onChange={e => setDetails({ ...details, "password": e.target.value })}/>
                             </div>
-                            <div class="form-check mb-3">
-                                <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked />
-                                <label class="form-check-label" for="flexCheckChecked">
+                            <div className="form-check mb-3">
+                                <input className="form-check-input" type="checkbox" value="" id="flexCheckChecked" />
+                                <label className="form-check-label" htmlFor="flexCheckChecked">
                                     Remember Me
                                 </label>
                                 <span style={{ float: "right" }}>
