@@ -4,3 +4,5 @@ venv/
 userAccounts/*/*.pyc
 .gitignore
 */*/*.pyc
+planner_frontend/node_modules/*
+planner_backend/Scripts
