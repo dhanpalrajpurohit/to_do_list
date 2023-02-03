@@ -1,11 +1,23 @@
-import React from 'react'
-import { Link } from 'react-router-dom';
-
+import React, {useEffect} from 'react';
 import './Header.css';
 
+import { Link } from 'react-router-dom';
+
+import {axiosInstance} from '../../Axios.jsx';
 import logo from '../../assets/img/logo.png';
 
 function Header() {
+    const [user, setUser] = React.useState({"name":null, "email": null})
+    
+useEffect(() => {
+        axiosInstance({
+          url: "get-profile/",
+          method: "GET"
+        }).then((response) => {
+          const data = response.data.user;
+          setUser({"name":data.name, "email": data['email']});
+       });
+      }, []);
     return (
         <div className='container'>
             <div className='header'>
@@ -16,14 +28,14 @@ function Header() {
                             <span className='text-white'>Planner</span>
                         </Link>
                     </div>
-                    <div class="dropdown">
-                        <button class="btn btn-light me-1 dropdown-toggle fw-bold" type="button" data-bs-toggle="dropdown" aria-expanded="true">
-                            Dhanpal Rajpurohit
+                    <div className="dropdown">
+                        <button className="btn btn-light me-1 dropdown-toggle fw-bold" type="button" data-bs-toggle="dropdown" aria-expanded="true">
+                            {user.name}
                         </button>
-                        <ul class="dropdown-menu" role="menu">
-                            <li><Link to="/profile" class="dropdown-item">Profile</Link></li>
-                            <li><Link to="/about" class="dropdown-item">About Us</Link></li>
-                            <li><Link to="/" class="dropdown-item">Sign-Out</Link></li>
+                        <ul className="dropdown-menu" role="menu">
+                            <li><Link to="/profile" className="dropdown-item">Profile</Link></li>
+                            <li><Link to="/about" className="dropdown-item">About Us</Link></li>
+                            <li><Link to="/" className="dropdown-item">Sign-Out</Link></li>
                         </ul>
                     </div>
                 </nav>

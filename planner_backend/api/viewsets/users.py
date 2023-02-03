@@ -42,3 +42,12 @@ class UserSignupView(APIView):
     token = get_tokens_for_user(user)
     return Response({'token':token, 'msg':'Registration Successful'}, status=status.HTTP_201_CREATED)
 
+
+class UserProfileView(APIView):
+  permission_classes = [IsAuthenticated]
+  def get(self, request):
+    user = UserProfileSerializer(request.user)
+    return Response({'user':user.data}, status=status.HTTP_201_CREATED)
+
+
+

@@ -2,8 +2,8 @@ import React from 'react'
 import './Signin.css';
 
 import { Twitter, Facebook, Google } from 'react-bootstrap-icons';
-import {isEmail, isEmpty, isContainWhiteSpace, isLength, isPassword} from "../../shared/validator";
-import HelpBlock from '../../component/helpblock/HelpBlock';
+import {isEmail, isEmpty, isContainWhiteSpace, isPassword} from "../../shared/validator";
+// import HelpBlock from '../../component/helpblock/HelpBlock';
 
 import {axiosInstance} from '../../Axios.jsx';
 import { Navigate, useNavigate } from 'react-router-dom';
@@ -28,7 +28,7 @@ function SignIn() {
       }).then((response) => {
         const data = response.data;
         const token = data.token;
-        localStorage.setItem('token',token)
+        localStorage.setItem('token',token);
         return axiosInstance({
           url: "signin/",
           method: "POST",
@@ -36,7 +36,7 @@ function SignIn() {
           data:details,
         }).then((response) => {
           console.log(response);
-          Navigate('/dashboard');
+          navigate('/dashboard');         
        });
      });
       
