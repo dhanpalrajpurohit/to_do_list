@@ -8,4 +8,4 @@ function HelpBlock(props) {
   )
 }
 
-export default HelpBlock
+export default HelpBlock;

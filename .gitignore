@@ -6,3 +6,5 @@ userAccounts/*/*.pyc
 */*/*.pyc
 planner_frontend/node_modules/*
 planner_backend/Scripts
+.vscode
+planner_backend/**/**/**.cpython-39.pyc

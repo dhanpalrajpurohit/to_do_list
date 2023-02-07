@@ -1,2 +1,2 @@
 from .tasks import TaskViewSet
-from .users import UserSigninView, UserSignupView, UserProfileView
+from .users import UserSigninView, UserSignupView, UserProfileView, CustomObtainAuthToken
