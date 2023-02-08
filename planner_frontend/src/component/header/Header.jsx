@@ -1,23 +1,35 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
+import {Navigate, useNavigate } from 'react-router-dom';
 import './Header.css';
 
 import { Link } from 'react-router-dom';
 
-import {axiosInstance} from '../../Axios.jsx';
+import { axiosInstance } from '../../Axios.jsx';
 import logo from '../../assets/img/logo.png';
 
-function Header() {
-    const [user, setUser] = React.useState({"name":null, "email": null})
-    
-useEffect(() => {
+function Header(props) {
+    let navigate = useNavigate();
+    const handleLogout = () => {
+        const data = {
+            'token' : localStorage.getItem('token')
+        }
         axiosInstance({
-          url: "get-profile/",
-          method: "GET"
-        }).then((response) => {
-          const data = response.data.user;
-          setUser({"name":data.name, "email": data['email']});
-       });
-      }, []);
+            url: "logout/",
+            method: "POST",
+            data:data
+          }).then((response) => {
+            if(response.status===204){
+                localStorage.clear();
+                navigate("/");
+            }
+         });
+    }
+    console.log(localStorage.getItem('token'));
+    if(localStorage.getItem('token')===null){
+        console.log(localStorage.getItem('token'));
+        navigate("/");
+    }
+
     return (
         <div className='container'>
             <div className='header'>
@@ -30,12 +42,12 @@ useEffect(() => {
                     </div>
                     <div className="dropdown">
                         <button className="btn btn-light me-1 dropdown-toggle fw-bold" type="button" data-bs-toggle="dropdown" aria-expanded="true">
-                            {user.name}
+                            {props.userdetail.name}
                         </button>
                         <ul className="dropdown-menu" role="menu">
                             <li><Link to="/profile" className="dropdown-item">Profile</Link></li>
                             <li><Link to="/about" className="dropdown-item">About Us</Link></li>
-                            <li><Link to="/" className="dropdown-item">Sign-Out</Link></li>
+                            <li><button onClick={() => handleLogout()} className="dropdown-item">Sign-Out</button></li>
                         </ul>
                     </div>
                 </nav>

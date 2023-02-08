@@ -29,26 +29,58 @@ function Index() {
 
   const handleClick = () => {
     const id = todoList.length + 1;
+    let data = {}
     if (value !== "") {
+      data = {
+        id: id,
+        title: value,
+        complete: false,
+      }
       setTodoList((prev) => [
         ...prev,
-        {
-          id: id,
-          task: value,
-          complete: false,
-        }
+        data
       ]);
+      axiosInstance({
+        url: `tasks/${user.email}/`,
+        method: "POST",
+        data: data
+      }).then((response) => {
+        if(response.status===200){
+          return axiosInstance({
+            url: `tasks/${user.email}/`,
+            method: "GET"
+          }).then((response) => {
+            const data = response.data;
+            setTodoList(data.tasks);
+         });
+        }
+      });
     }
     setValue("");
   };
 
   const handleComplete = (id) => {
-    const list = todoList.filter((task) => task.id !== id);
-    setTodoList(list);
-    if (todoList.length === 0) {
-      setShowInputText(false);
-    }
-  };
+    // const list = todoList.filter((task) => task.id !== id);
+    // setTodoList(list);
+    // if (todoList.length === 0) {
+    //   setShowInputText(false);
+    // }
+    axiosInstance({
+      url: `task/${user.email}/${id}/`,
+      method: "DELETE"
+    }).then((response) => {
+      if(response.status===204){
+        return axiosInstance({
+          url: `tasks/${user.email}/`,
+          method: "GET"
+        }).then((response) => {
+          const data = response.data;
+          setTodoList(data.tasks);
+       });
+      }
+    });
+  }
+
   const [user, setUser] = React.useState({"name":null, "email": null})
   useEffect(() => {
     axiosInstance({
@@ -70,7 +102,7 @@ function Index() {
   
   return (
     <div>
-      <Header />
+      <Header userdetail={user}/>
       <div className="container-fluid">
         <div className="row">
           <div className="col-sm-6 text-white mx-auto m-3">
