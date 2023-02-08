@@ -62,3 +62,9 @@ class CustomObtainAuthToken(ObtainAuthToken):
     token, created = Token.objects.get_or_create(user=user)
     return Response({'token': token.key})
 
+
+class UserSignoutView(APIView):
+  def post(self,request):
+    token = Token.objects.get(key=request.data.get('token'))
+    token.delete()
+    return Response(status=status.HTTP_204_NO_CONTENT)
