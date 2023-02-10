@@ -13,7 +13,7 @@ class UserCreationForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('email', 'name',)
+        fields = ('email', 'name', 'profile_picture')
 
     def clean_password2(self):
         # Check that the two password entries match
@@ -33,11 +33,15 @@ class UserCreationForm(forms.ModelForm):
 
 
 class UserChangeForm(forms.ModelForm):
-    password = ReadOnlyPasswordHashField()
+    # password = ReadOnlyPasswordHashField()
+    password = ReadOnlyPasswordHashField(label=("Password"),
+                                         help_text=("Raw passwords are not stored, so there is no way to see "
+                                                    "this user's password, but you can change the password "
+                                                    "using <a href=\"../password/\">this form</a>."))
 
     class Meta:
         model = User
-        fields = ('email', 'password', 'is_active', 'is_admin', 'name')
+        fields = ('email', 'password', 'is_active', 'is_admin', 'name', 'profile_picture')
 
     def clean_password(self):
         return self.initial["password"]
@@ -46,12 +50,11 @@ class UserChangeForm(forms.ModelForm):
 class UserAdmin(BaseUserAdmin):
     form = UserChangeForm
     add_form = UserCreationForm
-
     list_display = ('email', 'is_admin', 'name')
     list_filter = ('is_admin', )
     fieldsets = (
-        (None, {'fields': ('email', 'password', 'name')}),
-        ('Permissions', {'fields': ('is_admin',)}),
+        (None, {'fields': ('email', 'name', 'profile_picture')}),
+        ('Permissions', {'fields': ('is_admin', 'password')}),
     )
     add_fieldsets = (
         (None, {

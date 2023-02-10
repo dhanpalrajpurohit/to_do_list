@@ -3,30 +3,26 @@ import './Signin.css';
 
 import { Twitter, Facebook, Google } from 'react-bootstrap-icons';
 import { isEmail, isEmpty, isContainWhiteSpace, isPassword } from "../../shared/validator";
-import HelpBlock from '../../component/helpblock/HelpBlock';
+import {HelpBlock, ErrorBlock} from '../../component/helpblock/HelpBlock';
 
 import { axiosInstance } from '../../Axios.jsx';
 import { useNavigate } from 'react-router-dom';
 
 function SignIn() {
   const [details, setDetails] = React.useState({ "email": "", "password": "" });
-  const [errorMessage, setErrorMessage] = React.useState({ "email": "", "password": "" });
+  const [errorMessage, setErrorMessage] = React.useState({ "email": "", "password": "", "default": "" });
   let navigate = useNavigate();
 
 
   const submitHandler = e => {
     e.preventDefault();
     const isValidate = validateLoginForm();
-    if (!isValidate) {
-
-    }
-    else {
+    if (isValidate) {
       axiosInstance({
         url: "get-token/",
         method: "POST",
         data: details,
       }).then(response => {
-        console.log(response);
         if (response.status === 200) {
           const data = response.data;
           const token = data.token;
@@ -37,20 +33,23 @@ function SignIn() {
             headers: "token " + localStorage.getItem('token'),
             data: details,
           }).then(response => {
-            navigate('/dashboard');
+            if (response.status === 200) {
+              navigate('/dashboard');
+            }
           }).catch(error => {
-            console.log(error);
-            setErrorMessage("Unable to log in with provided credentials.");
-          });;
+            setErrorMessage({ "default": error.message });
+          });
         }
         else {
-          setErrorMessage(response);
+          if (response.status === 401) {
+            setErrorMessage({ "default": "Invalid email address or password" });
+          }
         }
-      })
-        .catch(error => {
-          setErrorMessage("Unable to log in with provided credentials.");
-        });
-
+      }).catch(error => {
+        if (error.response.status === 401) {
+          setErrorMessage({ "default": "Invalid email address or password" });
+        }
+      });
     }
   }
 
@@ -73,49 +72,6 @@ function SignIn() {
   }
 
   return (
-    // <div className='container'>
-    //   <div className='d-flex justify-content-center'>
-    //     <div className=''>
-    //       <div className='text-center'><h1 className='display-5'>Login to continue</h1></div>
-    //       <div>
-    //         <form onSubmit={submitHandler}>
-    //           <div className="mb-3">
-    //             <label htmlFor="txt_email" className="form-label">Email</label>
-    //             <input type="email" className="form-control" id="txt_email" onChange={e => setDetails({ ...details, "email": e.target.value })} />
-    //             {
-    //               error.email && <HelpBlock message={error.email} />
-    //             }
-    //           </div>
-    //           <div className="mb-3">
-    //             <label htmlFor="txt_password" className="form-label">Password</label>
-    //             <input type="password" className="form-control" id="txt_password" onChange={e => setDetails({ ...details, "password": e.target.value })} />
-    //             {
-    //               error.password && <HelpBlock message={error.password} />
-    //             }
-    //           </div>
-    //           <button type="submit" className="btn btn-primary">Submit</button>
-    //         </form>
-    //       </div>
-    //       <div>
-    //       </div>
-    //       <div className="seperator"><b>or</b></div>
-    //       <div className='social-icon' id="social-login">
-    //         <div className='pt-1 pb-1'>
-    //           <button type="submit" className="btn btn-primary">Google</button>
-    //         </div>
-    //         <div className='pt-1 pb-1'>
-    //           <button type="submit" className="btn btn-primary">Facebook</button>
-    //         </div>
-    //         <div className='pt-1 pb-1'>
-    //           <button type="submit" className="btn btn-primary">GitHub</button>
-    //         </div>
-    //       </div>
-    //     </div>
-    //   </div>
-    // </div>
-
-
-    // ----------Lates----------------
     <div className='container p-5'>
       <div className='row p-5'>
         <div className='col-md-6'>
@@ -125,9 +81,9 @@ function SignIn() {
           <div>
             <h3>Sign In</h3>
             <div>
-              <div class="alert alert-danger" role="alert">
-                email address or password is wrong.
-              </div>
+              {
+                errorMessage.default && <ErrorBlock message={errorMessage.default} />
+              }
               <form className="w-75" onSubmit={submitHandler}>
                 <div className="form-group mb-3">
                   <label htmlFor="username">Email Address</label>
@@ -158,7 +114,6 @@ function SignIn() {
                     <a className='text-decoration-none' href='/signup'>Create an account ??</a>
                   </span>
                 </div>
-
                 <hr />
               </form>
             </div>

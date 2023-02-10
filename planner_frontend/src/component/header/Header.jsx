@@ -24,12 +24,10 @@ function Header(props) {
             }
          });
     }
-    console.log(localStorage.getItem('token'));
     if(localStorage.getItem('token')===null){
         console.log(localStorage.getItem('token'));
         navigate("/");
     }
-
     return (
         <div className='container'>
             <div className='header'>

@@ -1,6 +1,6 @@
 import React from 'react'
 
-function HelpBlock(props) {
+export function HelpBlock(props) {
   return (
     <div>
     <small className="form-text text-danger">{props.message}</small>
@@ -8,4 +8,10 @@ function HelpBlock(props) {
   )
 }
 
-export default HelpBlock;
+export function ErrorBlock(props) {
+  return (
+      <div class="alert alert-danger" role="alert">
+          {props.message}
+      </div>
+  )
+}

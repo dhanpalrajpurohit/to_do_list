@@ -36,6 +36,7 @@ class User(AbstractBaseUser):
   name = models.CharField(max_length=200)
   is_active = models.BooleanField(default=True)
   is_admin = models.BooleanField(default=False)
+  profile_picture = models.ImageField(upload_to ='profile_pictures/% Y/% m/% d/', default='default_profile_picture.png')
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
 
