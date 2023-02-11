@@ -3,7 +3,7 @@ import './Signin.css';
 
 import { Twitter, Facebook, Google } from 'react-bootstrap-icons';
 import { isEmail, isEmpty, isContainWhiteSpace, isPassword } from "../../shared/validator";
-import {HelpBlock, ErrorBlock} from '../../component/helpblock/HelpBlock';
+import { HelpBlock, ErrorBlock } from '../../component/helpblock/HelpBlock';
 
 import { axiosInstance } from '../../Axios.jsx';
 import { useNavigate } from 'react-router-dom';
@@ -19,7 +19,7 @@ function SignIn() {
     const isValidate = validateLoginForm();
     if (isValidate) {
       axiosInstance({
-        url: "get-token/",
+        url: "get_token/",
         method: "POST",
         data: details,
       }).then(response => {
@@ -46,9 +46,10 @@ function SignIn() {
           }
         }
       }).catch(error => {
-        if (error.response.status === 401) {
+        // console.log(error.response.status);
+        // if (error.response.status === 401) {
           setErrorMessage({ "default": "Invalid email address or password" });
-        }
+        // }
       });
     }
   }

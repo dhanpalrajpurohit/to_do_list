@@ -16,7 +16,10 @@ function Header(props) {
         axiosInstance({
             url: "logout/",
             method: "POST",
-            data:data
+            data:data,
+            headers: {
+                'Authorization': `token ${localStorage.getItem('token')}`
+            }
           }).then((response) => {
             if(response.status===204){
                 localStorage.clear();

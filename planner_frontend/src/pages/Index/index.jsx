@@ -1,31 +1,73 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
+import { Trash2Fill, SendFill } from 'react-bootstrap-icons';
 
 import './index.css';
-
-import { Trash2Fill, SendFill } from 'react-bootstrap-icons';
-// import List from '../../component/list/List';
 import Header from '../../component/header/Header';
-import {axiosInstance} from '../../Axios.jsx';
 
-const intial_task = [
-  {
-    "title": "meditation"
-  }
-]
+import { axiosInstance } from '../../Axios.jsx';
+
+let newDate = new Date();
+let weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+const monthlist = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+let date = newDate.getDate();
+let month = newDate.getMonth();
+let day = newDate.getDay();
+let year = newDate.getFullYear();
 
 function Index() {
+
   let [showInputText, setShowInputText] = React.useState(false);
-  const [todoList, setTodoList] = React.useState(intial_task);
+  const [user, setUser] = React.useState({"name":null, "email": null});
+  const [todoList, setTodoList] = React.useState([]);
   let [value, setValue] = React.useState();
 
-  let newDate = new Date();
-  let weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
-  const monthlist = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
-  let date = newDate.getDate();
-  let month = newDate.getMonth();
-  let day = newDate.getDay();
-  let year = newDate.getFullYear();
+  useEffect(() => {
+    axiosInstance({
+      url: "get-profile/",
+      method: "GET",
+      headers: {
+        'Authorization': `token ${localStorage.getItem('token')}`
+      }
+    }).then((response) => {
+      const data = response.data.user;
+      setUser({"name":data.name, "email": data.email});
+      console.log(data.email);
+      return axiosInstance({
+        url: `tasks/${user.email}/`,
+        method: "GET",
+        headers: {
+          'Authorization': `token ${localStorage.getItem('token')}`
+        }
+      }).then((response) => {
+        const data = response.data;
+        setTodoList(data.tasks);
+      });
+    });
+  }, []);
+
+  const handleComplete = (id) => {
+    axiosInstance({
+      url: `task/${user.email}/${id}/`,
+      method: "DELETE",
+      headers: {
+        'Authorization': `token ${localStorage.getItem('token')}`
+      }
+    }).then((response) => {
+      if (response.status === 204) {
+        return axiosInstance({
+          url: `tasks/${user.email}/`,
+          method: "GET",
+          headers: {
+            'Authorization': `token ${localStorage.getItem('token')}`
+          }
+        }).then((response) => {
+          const data = response.data;
+          setTodoList(data.tasks);
+        });
+      }
+    });
+  }
 
   const handleClick = () => {
     const id = todoList.length + 1;
@@ -43,66 +85,32 @@ function Index() {
       axiosInstance({
         url: `tasks/${user.email}/`,
         method: "POST",
-        data: data
+        data: data,
+        headers: {
+          'Authorization': `token ${localStorage.getItem('token')}`
+        }
       }).then((response) => {
-        if(response.status===200){
+        if (response.status === 200) {
           return axiosInstance({
             url: `tasks/${user.email}/`,
-            method: "GET"
+            method: "GET",
+            headers: {
+              'Authorization': `token ${localStorage.getItem('token')}`
+            }
           }).then((response) => {
             const data = response.data;
             setTodoList(data.tasks);
-         });
+          });
         }
       });
     }
     setValue("");
   };
 
-  const handleComplete = (id) => {
-    // const list = todoList.filter((task) => task.id !== id);
-    // setTodoList(list);
-    // if (todoList.length === 0) {
-    //   setShowInputText(false);
-    // }
-    axiosInstance({
-      url: `task/${user.email}/${id}/`,
-      method: "DELETE"
-    }).then((response) => {
-      if(response.status===204){
-        return axiosInstance({
-          url: `tasks/${user.email}/`,
-          method: "GET"
-        }).then((response) => {
-          const data = response.data;
-          setTodoList(data.tasks);
-       });
-      }
-    });
-  }
 
-  const [user, setUser] = React.useState({"name":null, "email": null})
-  useEffect(() => {
-    axiosInstance({
-      url: "get-profile/",
-      method: "GET"
-    }).then((response) => {
-      const data = response.data.user;
-      setUser({"name": data.name, "email": data.email});
-      return axiosInstance({
-        url: `tasks/${data.email}/`,
-        method: "GET"
-      }).then((response) => {
-        const data = response.data;
-        setTodoList(data.tasks);
-     });
-   });
-  }, []);
-
-  
   return (
     <div>
-      <Header userdetail={user}/>
+      <Header userdetail={user} />
       <div className="container-fluid">
         <div className="row">
           <div className="col-sm-6 text-white mx-auto m-3">
@@ -122,21 +130,21 @@ function Index() {
                                 {todo.title}
                               </label>
                             </div>
-                            <button className='btn justify-content-right col-auto' onClick={() => handleComplete(todo.id)}><Trash2Fill className='global-icons-color'/></button>
+                            <button className='btn justify-content-right col-auto' onClick={() => handleComplete(todo.id)}><Trash2Fill className='global-icons-color' /></button>
                           </li>
                         )
                       })}
                     </ul>
                     {showInputText && <div className="input-group mt-3">
-                      <input type="text" value={value} className="form-control text-dark" placeholder="Enter here..." aria-describedby="button-addon2" onChange={(e) => setValue(e.target.value)}/>
-                        <button className="btn" type="button" onClick={() => handleClick()}><SendFill  className='global-icons-color' /></button>
+                      <input type="text" value={value} className="form-control text-dark" placeholder="Enter here..." aria-describedby="button-addon2" onChange={(e) => setValue(e.target.value)} />
+                      <button className="btn" type="button" onClick={() => handleClick()}><SendFill className='global-icons-color' /></button>
                     </div>}
                   </div>
                 </div>
               </div>
             </div>
             {!showInputText && <div className="text-center btn-center">
-              <button type="button" className="btn btn-primary  btn-lg rounded-circle" onClick={() => setShowInputText(true)}><b>+</b></button>
+              <button type="button" className="btn btn-primary btn-lg rounded-circle" onClick={() => setShowInputText(true)}><b>+</b></button>
             </div>}
           </div>
         </div>

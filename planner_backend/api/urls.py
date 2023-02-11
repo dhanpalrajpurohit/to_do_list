@@ -5,7 +5,7 @@ from rest_framework.authtoken import views as token_views
 from .viewsets import TaskViewSet, UserSigninView, UserSignupView, UserProfileView, CustomObtainAuthToken, TasksViewSet, UserSignoutView
 
 urlpatterns = [
-    path('get-token/', CustomObtainAuthToken.as_view(), name='get-token'),
+    path('get_token/', CustomObtainAuthToken.as_view(), name='get-token'),
     path('signup/', UserSignupView.as_view(), name='user-signup'),
     path('signin/', UserSigninView.as_view(), name='user-signin'),
     path('logout/', UserSignoutView.as_view(), name='user-signout'),

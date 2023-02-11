@@ -53,6 +53,7 @@ class UserProfileView(APIView):
 
 
 class CustomObtainAuthToken(ObtainAuthToken):
+  permission_classes = [AllowAny]
   serializer_class = AuthTokenSerializer
 
   def post(self, request, *args, **kwargs):
