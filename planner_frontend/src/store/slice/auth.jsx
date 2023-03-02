@@ -1,17 +1,37 @@
-import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
-export const loginAPI = createAsyncThunk("loginAPI", async() => {
-    const response = await fetch();
-    return response.json();
+import { axiosInstance } from '../../Axios';
+
+export const loginAPI = createAsyncThunk("loginAPI", async (data, thunkAPI) => {
+    const response = await axiosInstance({
+        url: "get_token/",
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        data: data,
+    });
+    
+    if (response.status === 200) {
+        localStorage.setItem("token", response.data.token)
+        return response.data
+    } else {
+        return thunkAPI.rejectWithValue(response.data)
+    }
 });
 
-const authSlice = createSlice({
+export const authSlice = createSlice({
     name: "auth",
-    initialState : {
-        isLoading : false,
+    initialState: {
+        username: null,
+        email: null,
+        name: null,
+        isLoading: false,
         data: null,
+        isError: false,
+        isSuccess: false
     },
-    extraReducers : (builder) => {
+    extraReducers: (builder) => {
         builder.addCase(loginAPI.fulfilled, (state, action) => {
             state.isLoading = false;
             state.data = action.payload;
@@ -20,10 +40,9 @@ const authSlice = createSlice({
             state.isLoading = true;
         });
         builder.addCase(loginAPI.rejected, (state, action) => {
-            console.log("Error", action.payload);
             state.isError = true;
         });
-    } 
+    }
 });
 
-export default authSlice.reducer;
+export const userSelector = state => state.auth

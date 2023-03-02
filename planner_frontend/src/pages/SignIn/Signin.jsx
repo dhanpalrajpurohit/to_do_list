@@ -1,4 +1,7 @@
-import React from 'react'
+import React, {useEffect} from 'react'
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router-dom"
+
 import './Signin.css';
 
 import { Twitter, Facebook, Google } from 'react-bootstrap-icons';
@@ -8,49 +11,64 @@ import { HelpBlock, ErrorBlock } from '../../component/helpblock/HelpBlock';
 import { axiosInstance } from '../../Axios.jsx';
 import { useNavigate } from 'react-router-dom';
 
+import {loginAPI} from '../../store/slice/auth';
+import {userSelector} from "../../store/slice/auth";
+
 function SignIn() {
+  let navigate = useNavigate();
+  const dispatch = useDispatch();
   const [details, setDetails] = React.useState({ "email": "", "password": "" });
   const [errorMessage, setErrorMessage] = React.useState({ "email": "", "password": "", "default": "" });
-  let navigate = useNavigate();
+  const { username, email, name, isLoading, data, isError, isSuccess } = useSelector(userSelector);
+
+  useEffect(() => {
+    if (isError) {
+    }
+    if (isSuccess) {
+      navigate("/")
+    }
+  }, [isError, isSuccess])
 
 
   const submitHandler = e => {
     e.preventDefault();
     const isValidate = validateLoginForm();
     if (isValidate) {
-      axiosInstance({
-        url: "get_token/",
-        method: "POST",
-        data: details,
-      }).then(response => {
-        if (response.status === 200) {
-          const data = response.data;
-          const token = data.token;
-          localStorage.setItem('token', token);
-          axiosInstance({
-            url: "signin/",
-            method: "POST",
-            headers: "token " + localStorage.getItem('token'),
-            data: details,
-          }).then(response => {
-            if (response.status === 200) {
-              navigate('/dashboard');
-            }
-          }).catch(error => {
-            setErrorMessage({ "default": error.message });
-          });
-        }
-        else {
-          if (response.status === 401) {
-            setErrorMessage({ "default": "Invalid email address or password" });
-          }
-        }
-      }).catch(error => {
-        // console.log(error.response.status);
-        // if (error.response.status === 401) {
-          setErrorMessage({ "default": "Invalid email address or password" });
-        // }
-      });
+      // axiosInstance({
+      //   url: "get_token/",
+      //   method: "POST",
+      //   data: details,
+      // }).then(response => {
+      //   if (response.status === 200) {
+      //     const data = response.data;
+      //     const token = data.token;
+      //     localStorage.setItem('token', token);
+      //     axiosInstance({
+      //       url: "signin/",
+      //       method: "POST",
+      //       headers: "token " + localStorage.getItem('token'),
+      //       data: details,
+      //     }).then(response => {
+      //       if (response.status === 200) {
+      //         navigate('/dashboard');
+      //       }
+      //     }).catch(error => {
+      //       setErrorMessage({ "default": error.message });
+      //     });
+      //   }
+      //   else {
+      //     if (response.status === 401) {
+      //       setErrorMessage({ "default": "Invalid email address or password" });
+      //     }
+      //   }
+      // }).catch(error => {
+      //   // console.log(error.response.status);
+      //   // if (error.response.status === 401) {
+      //     setErrorMessage({ "default": "Invalid email address or password" });
+      //   // }
+      // });
+      dispatch(loginAPI(details));
+
     }
   }
 
