@@ -8,18 +8,18 @@ import { Twitter, Facebook, Google } from 'react-bootstrap-icons';
 import { isEmail, isEmpty, isContainWhiteSpace, isPassword } from "../../shared/validator";
 import { HelpBlock, ErrorBlock } from '../../component/helpblock/HelpBlock';
 
-import { axiosInstance } from '../../Axios.jsx';
 import { useNavigate } from 'react-router-dom';
 
-import {loginAPI} from '../../store/slice/auth';
-import {userSelector} from "../../store/slice/auth";
+import {getTokeAPI, getUserAPI} from '../../store/services/authentication';
+import {userSelector, getUserSelector} from "../../store/slice/tokenSlicer";
 
 function SignIn() {
   let navigate = useNavigate();
   const dispatch = useDispatch();
   const [details, setDetails] = React.useState({ "email": "", "password": "" });
   const [errorMessage, setErrorMessage] = React.useState({ "email": "", "password": "", "default": "" });
-  const { username, email, name, isLoading, data, isError, isSuccess } = useSelector(userSelector);
+  const { isLoading, token, isError, isSuccess } = useSelector(userSelector);
+  const { isloading, data, error, issucess } = useSelector(getUserSelector);
 
   useEffect(() => {
     if (isError) {
@@ -33,6 +33,11 @@ function SignIn() {
   const submitHandler = e => {
     e.preventDefault();
     const isValidate = validateLoginForm();
+    dispatch(getTokeAPI(details));
+    if(isSuccess){
+      dispatch(getUserAPI(details));
+      console.log(data);
+    }
     if (isValidate) {
       // axiosInstance({
       //   url: "get_token/",
@@ -67,7 +72,7 @@ function SignIn() {
       //     setErrorMessage({ "default": "Invalid email address or password" });
       //   // }
       // });
-      dispatch(loginAPI(details));
+      
 
     }
   }
