@@ -1,6 +1,5 @@
-import React, {useEffect} from 'react'
-import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom"
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector, shallowEqual } from "react-redux";
 
 import './Signin.css';
 
@@ -10,71 +9,31 @@ import { HelpBlock, ErrorBlock } from '../../component/helpblock/HelpBlock';
 
 import { useNavigate } from 'react-router-dom';
 
-import {getTokeAPI, getUserAPI} from '../../store/services/authentication';
-import {userSelector, getUserSelector} from "../../store/slice/tokenSlicer";
+import { getTokenAPI, getUserAPI } from '../../store/services/authentication';
+import { getUserSelector } from "../../store/slice/tokenSlicer";
 
 function SignIn() {
   let navigate = useNavigate();
   const dispatch = useDispatch();
   const [details, setDetails] = React.useState({ "email": "", "password": "" });
   const [errorMessage, setErrorMessage] = React.useState({ "email": "", "password": "", "default": "" });
-  const { isLoading, token, isError, isSuccess } = useSelector(userSelector);
-  const { isloading, data, error, issucess } = useSelector(getUserSelector);
+  const { isLoading, isError, isSuccess, errorMsg, data } = useSelector(getUserSelector);
 
-  useEffect(() => {
-    if (isError) {
+  useEffect(()=>{
+    if(localStorage.getItem('token')!==undefined && localStorage.getItem('token')!==null ){
+      dispatch(getUserAPI(details));
     }
-    if (isSuccess) {
-      navigate("/")
-    }
-  }, [isError, isSuccess])
-
-
-  const submitHandler = e => {
+  }, [isSuccess]);
+  const submitHandler = (e) => {
     e.preventDefault();
     const isValidate = validateLoginForm();
-    dispatch(getTokeAPI(details));
-    if(isSuccess){
-      dispatch(getUserAPI(details));
-      console.log(data);
-    }
-    if (isValidate) {
-      // axiosInstance({
-      //   url: "get_token/",
-      //   method: "POST",
-      //   data: details,
-      // }).then(response => {
-      //   if (response.status === 200) {
-      //     const data = response.data;
-      //     const token = data.token;
-      //     localStorage.setItem('token', token);
-      //     axiosInstance({
-      //       url: "signin/",
-      //       method: "POST",
-      //       headers: "token " + localStorage.getItem('token'),
-      //       data: details,
-      //     }).then(response => {
-      //       if (response.status === 200) {
-      //         navigate('/dashboard');
-      //       }
-      //     }).catch(error => {
-      //       setErrorMessage({ "default": error.message });
-      //     });
-      //   }
-      //   else {
-      //     if (response.status === 401) {
-      //       setErrorMessage({ "default": "Invalid email address or password" });
-      //     }
-      //   }
-      // }).catch(error => {
-      //   // console.log(error.response.status);
-      //   // if (error.response.status === 401) {
-      //     setErrorMessage({ "default": "Invalid email address or password" });
-      //   // }
-      // });
-      
-
-    }
+    if (isValidate) {      
+        const res = dispatch(getUserAPI(details));
+        console.log(res);
+        if(isSuccess){
+          navigate("/dashboard");
+        }
+      }
   }
 
   const validateLoginForm = e => {

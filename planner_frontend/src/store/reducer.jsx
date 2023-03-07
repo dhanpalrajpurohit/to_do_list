@@ -4,8 +4,8 @@ import thunkMiddleware from 'redux-thunk';
 
 export const store = configureStore({
   reducer: {
-    tokenslice: tokenSlice.reducer,
+    // tokenslice: tokenSlice.reducer,
     getUserSlice: getuserSlice.reducer
   },
-  middleware: [...getDefaultMiddleware(), thunkMiddleware]
+  // middleware: [...getDefaultMiddleware(), thunkMiddleware]
 });

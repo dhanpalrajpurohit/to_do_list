@@ -1,11 +1,15 @@
 import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from "react-redux";
 import { Navigate, useNavigate } from 'react-router-dom';
+
 import { Trash2Fill, SendFill } from 'react-bootstrap-icons';
 
 import './index.css';
 import Header from '../../component/header/Header';
 
 import { axiosInstance } from '../../Axios.jsx';
+import { getUserSelector } from "../../store/slice/tokenSlicer";
+
 
 let newDate = new Date();
 let weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
@@ -18,32 +22,39 @@ let year = newDate.getFullYear();
 function Index() {
 
   let [showInputText, setShowInputText] = React.useState(false);
+  const { isLoading, isError, isSuccess, errorMsg, data } = useSelector(getUserSelector);
   const [user, setUser] = React.useState({"name":null, "email": null});
   const [todoList, setTodoList] = React.useState([]);
   let [value, setValue] = React.useState();
 
   useEffect(() => {
-    axiosInstance({
-      url: "get-profile/",
-      method: "GET",
-      headers: {
-        'Authorization': `token ${localStorage.getItem('token')}`
-      }
-    }).then((response) => {
-      const data = response.data.user;
-      setUser({"name":data.name, "email": data.email});
-      console.log(data.email);
-      return axiosInstance({
-        url: `tasks/${user.email}/`,
-        method: "GET",
-        headers: {
-          'Authorization': `token ${localStorage.getItem('token')}`
-        }
-      }).then((response) => {
-        const data = response.data;
-        setTodoList(data.tasks);
-      });
-    });
+    // axiosInstance({
+    //   url: "get-profile/",
+    //   method: "GET",
+    //   headers: {
+    //     'Authorization': `token ${localStorage.getItem('token')}`
+    //   }
+    // }).then((response) => {
+    //   const data = response.data.user;
+    //   setUser({"name":data.name, "email": data.email});
+    //   console.log(data.email);
+    //   return axiosInstance({
+    //     url: `tasks/${user.email}/`,
+    //     method: "GET",
+    //     headers: {
+    //       'Authorization': `token ${localStorage.getItem('token')}`
+    //     }
+    //   }).then((response) => {
+    //     const data = response.data;
+    //     setTodoList(data.tasks);
+    //   });
+    // });
+    // dispatch(getUserAPI(details));
+    console.log(isSuccess);
+    if(isSuccess){
+      console.log(data);
+      setUser(data.user);
+    }
   }, []);
 
   const handleComplete = (id) => {
