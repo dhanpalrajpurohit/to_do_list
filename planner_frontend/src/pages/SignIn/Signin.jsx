@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useDispatch, useSelector, shallowEqual } from "react-redux";
 
 import './Signin.css';
@@ -15,24 +15,34 @@ import { getUserSelector } from "../../store/slice/tokenSlicer";
 function SignIn() {
   let navigate = useNavigate();
   const dispatch = useDispatch();
+  const initialRender = useRef(true);
+
   const [details, setDetails] = React.useState({ "email": "", "password": "" });
   const [errorMessage, setErrorMessage] = React.useState({ "email": "", "password": "", "default": "" });
-  const { isLoading, isError, isSuccess, errorMsg, data } = useSelector(getUserSelector);
+  const { isLoading, isError, isSuccess, errorMsg, data } = useSelector((state)=>state.user);
 
-  useEffect(()=>{
-    if(localStorage.getItem('token')!==undefined && localStorage.getItem('token')!==null ){
-      dispatch(getUserAPI(details));
+
+  useEffect(() => {
+    if(!initialRender.current) {
+        if(isSuccess) {
+          navigate("/dashboard");
+         } else {
+            navigate("/")
+         }
+    } else {
+        initialRender.current = false;
     }
-  }, [isSuccess]);
-  const submitHandler = (e) => {
+ }, [isSuccess]);
+
+
+  const submitHandler = async(e) => {
     e.preventDefault();
     const isValidate = validateLoginForm();
-    if (isValidate) {      
-        const res = dispatch(getUserAPI(details));
-        console.log(res);
-        if(isSuccess){
-          navigate("/dashboard");
-        }
+    if (isValidate) {    
+        const response = await getTokenAPI(details);
+        if(response.status===200){
+          dispatch(getUserAPI(details));
+        } 
       }
   }
 

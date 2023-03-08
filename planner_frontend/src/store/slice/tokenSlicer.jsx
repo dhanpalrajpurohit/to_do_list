@@ -25,8 +25,8 @@ import {getTokeAPI, getUserAPI} from './../services/authentication'
 //     }
 // });
 
-export const getuserSlice = createSlice({
-    name: "getUserSlice",
+export const getUserSlice = createSlice({
+    name: "user",
     initialState: {
         isLoading: false,
         isError: false,
@@ -50,5 +50,4 @@ export const getuserSlice = createSlice({
     }
 })
 
-// export const userSelector = state => state.tokenslice
-export const getUserSelector = state => state.getUserSlice
+export default getUserSlice;
