@@ -8,6 +8,7 @@ from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 
 from api.serializers import UserLoginSerializer, UserRegistrationSerializer, UserProfileSerializer, AuthTokenSerializer
+from api.models import User
 from api.renderers import UserRenderer
 
 # Generate Token Manually
@@ -50,6 +51,20 @@ class UserProfileView(APIView):
   def get(self, request):
     user = UserProfileSerializer(request.user)
     return Response({'user':user.data}, status=status.HTTP_201_CREATED)
+
+  def put(self, request):
+    user = request.user
+    try:
+      user = User.objects.get(email=email)
+    except User.DoesNotExits:
+      return Response(status=status.HTTP_404_NOT_FOUND)
+
+    user = UserProfileSerializer(user, request.data)
+    user.is_valid(raise_exception=True)
+    user.save()
+    return Response({'user': user.data}, status=status.HTTP_204_NO_CONTENT)
+
+
 
 
 class CustomObtainAuthToken(ObtainAuthToken):

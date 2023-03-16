@@ -2,20 +2,18 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { axiosInstance } from '../../Axios';
 
-export const getTokenAPI = async (data) => {
+export const getTokenAPI = createAsyncThunk("getTokenAPI", async (data, thunkAPI) => {
     const response = await axiosInstance({
         url: "get_token/",
         method: "POST",
         headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/json'
         },
         data: data,
     });
-    if (response.status === 200) {
-        localStorage.setItem('token', response.data.token);
-        return response;
-    }
-}
+    const res_data = await response.data;
+    return res_data;
+});
 
 export const getUserAPI = createAsyncThunk("getUser", async (data, thunkAPI) => {
     const response = await axiosInstance({
@@ -27,11 +25,8 @@ export const getUserAPI = createAsyncThunk("getUser", async (data, thunkAPI) => 
         },
         data: data,
     });
-    if (response.status === 200) {
-        return await response.data;
-    } else {
-        return thunkAPI.rejectWithValue(response.data)
-    }
+    const res_data = await response.data;
+    return res_data; 
 });
 
 export const getProfileAPI = createAsyncThunk("getProfileUser", async (data, thunkAPI) => {
@@ -44,9 +39,20 @@ export const getProfileAPI = createAsyncThunk("getProfileUser", async (data, thu
         },
         data: data,
     });
-    if (response.status === 200) {
-        return await response.data;
-    } else {
-        return thunkAPI.rejectWithValue(response.data)
-    }
+    const res_data = await response.json();
+    return res_data;
+});
+
+export const updateUserProfileAPI = createAsyncThunk("userProfileUser", async (data, thunkAPI) => {
+    const response = await axiosInstance({
+        url: "get-profile/",
+        method: "PUT",
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Token ${localStorage.getItem('token')}`
+        },
+        data: data,
+    });
+    const res_data = await response.json();
+    return res_data;
 });

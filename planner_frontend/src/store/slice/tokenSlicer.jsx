@@ -1,29 +1,6 @@
 import { createSlice} from '@reduxjs/toolkit';
-import {getTokeAPI, getUserAPI} from './../services/authentication'
+import {getTokenAPI, getUserAPI, getProfileAPI, updateUserProfileAPI} from './../services/authentication';
 
-
-// export const tokenSlice = createSlice({
-//     name: "tokenslice",
-//     initialState: {
-//         isLoading: false,
-//         token: null,
-//         isError: false,
-//         isSuccess: false
-//     },
-//     extraReducers: (builder) => {
-//         builder.addCase(getTokeAPI.fulfilled, (state, action) => {
-//             state.isLoading = false;
-//             state.isSuccess = true;
-//             state.token = action.payload.token;
-//         });
-//         builder.addCase(getTokeAPI.pending, (state, action) => {
-//             state.isLoading = true;
-//         });
-//         builder.addCase(getTokeAPI.rejected, (state, action) => {
-//             state.isError = true;
-//         });
-//     }
-// });
 
 export const getUserSlice = createSlice({
     name: "user",
@@ -33,10 +10,10 @@ export const getUserSlice = createSlice({
         isSuccess: false,
         errorMsg:null,
         data: null,
+        token: null
     },
     extraReducers: (builder) => {
         builder.addCase(getUserAPI.fulfilled, (state, action) => {
-            console.log(action, action.payload)
             state.isLoading = false;
             state.isSuccess = true;
             state.data = action.payload;
@@ -47,6 +24,41 @@ export const getUserSlice = createSlice({
         builder.addCase(getUserAPI.rejected, (state, action) => {
             state.isError = true;
         });
+
+
+        builder.addCase(getTokenAPI.fulfilled, (state, action) => {
+            state.token = action.payload;
+        });
+        builder.addCase(getTokenAPI.pending, (state, action) => {
+            state.isLoading = true;
+        });
+        builder.addCase(getTokenAPI.rejected, (state, action) => {
+            state.isError = true;
+        });
+
+
+        builder.addCase(getProfileAPI.fulfilled, (state, action) => {
+            state.token = action.payload;
+        });
+        builder.addCase(getProfileAPI.pending, (state, action) => {
+            state.isLoading = true;
+        });
+        builder.addCase(getProfileAPI.rejected, (state, action) => {
+            state.isError = true;
+        });
+
+
+        builder.addCase(updateUserProfileAPI.fulfilled, (state, action) => {
+            state.token = action.payload;
+        });
+        builder.addCase(updateUserProfileAPI.pending, (state, action) => {
+            state.isLoading = true;
+        });
+        builder.addCase(updateUserProfileAPI.rejected, (state, action) => {
+            state.isError = true;
+        });
+
+
     }
 })
 

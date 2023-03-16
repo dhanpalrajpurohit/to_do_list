@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react'
-import { useDispatch, useSelector, shallowEqual } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import './Signin.css';
 
@@ -39,8 +39,8 @@ function SignIn() {
     e.preventDefault();
     const isValidate = validateLoginForm();
     if (isValidate) {    
-        const response = await getTokenAPI(details);
-        if(response.status===200){
+        const response = await dispatch(getTokenAPI(details));
+        if(response.payload && response.payload["token"]){
           dispatch(getUserAPI(details));
         } 
       }
