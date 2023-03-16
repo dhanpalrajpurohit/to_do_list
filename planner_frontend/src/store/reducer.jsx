@@ -1,8 +1,11 @@
-import { configureStore } from "@reduxjs/toolkit";
-import authReducer from "./slice/auth";
+import { configureStore, getDefaultMiddleware ,  } from '@reduxjs/toolkit';
+import {tokenSlice, getUserSlice} from "./slice/tokenSlicer";
+import thunkMiddleware from 'redux-thunk';
 
 export const store = configureStore({
   reducer: {
-    auth: authReducer,
+    // tokenslice: tokenSlice.reducer,
+    user: getUserSlice.reducer
   },
+  // middleware: [...getDefaultMiddleware(), thunkMiddleware]
 });

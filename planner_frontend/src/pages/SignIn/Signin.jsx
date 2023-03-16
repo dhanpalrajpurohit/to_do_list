@@ -1,57 +1,49 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
+import { useDispatch, useSelector } from "react-redux";
+
 import './Signin.css';
 
 import { Twitter, Facebook, Google } from 'react-bootstrap-icons';
 import { isEmail, isEmpty, isContainWhiteSpace, isPassword } from "../../shared/validator";
 import { HelpBlock, ErrorBlock } from '../../component/helpblock/HelpBlock';
 
-import { axiosInstance } from '../../Axios.jsx';
 import { useNavigate } from 'react-router-dom';
 
+import { getTokenAPI, getUserAPI } from '../../store/services/authentication';
+import { getUserSelector } from "../../store/slice/tokenSlicer";
+
 function SignIn() {
+  let navigate = useNavigate();
+  const dispatch = useDispatch();
+  const initialRender = useRef(true);
+
   const [details, setDetails] = React.useState({ "email": "", "password": "" });
   const [errorMessage, setErrorMessage] = React.useState({ "email": "", "password": "", "default": "" });
-  let navigate = useNavigate();
+  const { isLoading, isError, isSuccess, errorMsg, data } = useSelector((state)=>state.user);
 
 
-  const submitHandler = e => {
+  useEffect(() => {
+    if(!initialRender.current) {
+        if(isSuccess) {
+          navigate("/dashboard");
+         } else {
+            navigate("/")
+         }
+    } else {
+        initialRender.current = false;
+    }
+ }, [isSuccess]);
+
+
+  const submitHandler = async(e) => {
     e.preventDefault();
     const isValidate = validateLoginForm();
-    if (isValidate) {
-      axiosInstance({
-        url: "get_token/",
-        method: "POST",
-        data: details,
-      }).then(response => {
-        if (response.status === 200) {
-          const data = response.data;
-          const token = data.token;
-          localStorage.setItem('token', token);
-          axiosInstance({
-            url: "signin/",
-            method: "POST",
-            headers: "token " + localStorage.getItem('token'),
-            data: details,
-          }).then(response => {
-            if (response.status === 200) {
-              navigate('/dashboard');
-            }
-          }).catch(error => {
-            setErrorMessage({ "default": error.message });
-          });
-        }
-        else {
-          if (response.status === 401) {
-            setErrorMessage({ "default": "Invalid email address or password" });
-          }
-        }
-      }).catch(error => {
-        // console.log(error.response.status);
-        // if (error.response.status === 401) {
-          setErrorMessage({ "default": "Invalid email address or password" });
-        // }
-      });
-    }
+    if (isValidate) {    
+        const response = await dispatch(getTokenAPI(details));
+        if(response.payload && response.payload["token"]){
+          dispatch(getUserAPI(details));
+        } 
+      }
   }
 
   const validateLoginForm = e => {
