@@ -1,5 +1,5 @@
 import { createSlice} from '@reduxjs/toolkit';
-import {getTokenAPI, getUserAPI, getProfileAPI, updateUserProfileAPI} from './../services/authentication';
+import {getTokenAPI, getUserAPI, getProfileAPI, updateUserProfileAPI, logoutAPI} from './../services/authentication';
 
 
 export const getUserSlice = createSlice({
@@ -38,7 +38,7 @@ export const getUserSlice = createSlice({
 
 
         builder.addCase(getProfileAPI.fulfilled, (state, action) => {
-            state.token = action.payload;
+            state.data = action.payload;
         });
         builder.addCase(getProfileAPI.pending, (state, action) => {
             state.isLoading = true;
@@ -48,13 +48,29 @@ export const getUserSlice = createSlice({
         });
 
 
-        builder.addCase(updateUserProfileAPI.fulfilled, (state, action) => {
-            state.token = action.payload;
+        // builder.addCase(updateUserProfileAPI.fulfilled, (state, action) => {
+        //     state.data = action.payload;
+        // });
+        // builder.addCase(updateUserProfileAPI.pending, (state, action) => {
+        //     state.isLoading = true;
+        // });
+        // builder.addCase(updateUserProfileAPI.rejected, (state, action) => {
+        //     state.isError = true;
+        // });
+
+
+        builder.addCase(logoutAPI.fulfilled, (state, action) => {
+            state.isLoading = false;
+            state.isError = false;
+            state.isSuccess = true;
+            state.errorMsg = null;
+            state.data = null;
+            state.token = null;
         });
-        builder.addCase(updateUserProfileAPI.pending, (state, action) => {
+        builder.addCase(logoutAPI.pending, (state, action) => {
             state.isLoading = true;
         });
-        builder.addCase(updateUserProfileAPI.rejected, (state, action) => {
+        builder.addCase(logoutAPI.rejected, (state, action) => {
             state.isError = true;
         });
 

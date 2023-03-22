@@ -1,36 +1,34 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import {Navigate, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from "react-redux";
+
 import './Header.css';
 
-import { Link } from 'react-router-dom';
-
-import { axiosInstance } from '../../Axios.jsx';
 import logo from '../../assets/img/logo.png';
+import {logoutAPI} from "../../store/services/authentication";
 
-function Header(props) {
+function Header() {
     let navigate = useNavigate();
-    const handleLogout = () => {
-        const data = {
-            'token' : localStorage.getItem('token')
-        }
-        axiosInstance({
-            url: "logout/",
-            method: "POST",
-            data:data,
-            headers: {
-                'Authorization': `token ${localStorage.getItem('token')}`
-            }
-          }).then((response) => {
-            if(response.status===204){
-                localStorage.clear();
+    const dispatch = useDispatch();
+    const initialRender = useRef(true);
+    const { isLoading, isError, isSuccess, errorMsg, data, token } = useSelector((state)=>state.user);
+
+    const handleLogout = async() => {
+        dispatch(logoutAPI());
+    }
+
+    useEffect(() => {
+        if(!initialRender.current) {
+            if(!token) {
+                localStorage.clear()
                 navigate("/");
-            }
-         });
-    }
-    if(localStorage.getItem('token')===null){
-        console.log(localStorage.getItem('token'));
-        navigate("/");
-    }
+             }
+        } else {
+            initialRender.current = false;
+        }
+     }, [isSuccess]);
+
     return (
         <div className='container'>
             <div className='header'>
@@ -43,7 +41,7 @@ function Header(props) {
                     </div>
                     <div className="dropdown">
                         <button className="btn btn-light me-1 dropdown-toggle fw-bold" type="button" data-bs-toggle="dropdown" aria-expanded="true">
-                            {props.userdetail.name}
+                            {data.user.name}
                         </button>
                         <ul className="dropdown-menu" role="menu">
                             <li><Link to="/profile" className="dropdown-item">Profile</Link></li>

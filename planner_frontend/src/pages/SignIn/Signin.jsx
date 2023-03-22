@@ -1,16 +1,16 @@
 import React, { useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from 'react-router-dom';
+import { Twitter, Facebook, Google } from 'react-bootstrap-icons';
 
 import './Signin.css';
 
-import { Twitter, Facebook, Google } from 'react-bootstrap-icons';
 import { isEmail, isEmpty, isContainWhiteSpace, isPassword } from "../../shared/validator";
-import { HelpBlock, ErrorBlock } from '../../component/helpblock/HelpBlock';
-
-import { useNavigate } from 'react-router-dom';
-
 import { getTokenAPI, getUserAPI } from '../../store/services/authentication';
 import { getUserSelector } from "../../store/slice/tokenSlicer";
+import { HelpBlock, ErrorBlock } from '../../component/helpblock/HelpBlock';
+
+
 
 function SignIn() {
   let navigate = useNavigate();
@@ -41,6 +41,7 @@ function SignIn() {
     if (isValidate) {    
         const response = await dispatch(getTokenAPI(details));
         if(response.payload && response.payload["token"]){
+          localStorage.setItem("token", response.payload["token"])
           dispatch(getUserAPI(details));
         } 
       }

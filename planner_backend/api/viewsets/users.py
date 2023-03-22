@@ -55,7 +55,7 @@ class UserProfileView(APIView):
   def put(self, request):
     user = request.user
     try:
-      user = User.objects.get(email=email)
+      user = User.objects.get(email=user.email)
     except User.DoesNotExits:
       return Response(status=status.HTTP_404_NOT_FOUND)
 

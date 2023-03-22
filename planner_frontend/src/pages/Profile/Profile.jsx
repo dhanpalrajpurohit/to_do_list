@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom';
 
 import Header from '../../component/header/Header';
 import ProfileCard from '../../component/ProfileCard/ProfileCard';
+import { getTokenAPI, getUserAPI } from '../../store/services/authentication';
+
 
 import { axiosInstance } from '../../Axios.jsx';
 
@@ -19,20 +21,19 @@ function Profile() {
     useEffect(() => {
         if (!initialRender.current) {
             if (isSuccess) {
-                console.log({isSuccess}, {data})
-                setUser(data);
+                setUser(data.user);
             } else {
                 navigate("/");
             }
         } else {
             initialRender.current = false;
+            dispatch(getUserAPI(details));
         }
         if (token === null) {
             navigate("/");
         }
-        console.log({isSuccess}, {data})
         setUser(data.user);
-    }, [isSuccess]);
+    }, []);
 
     return (
         <div>

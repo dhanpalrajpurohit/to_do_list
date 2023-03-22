@@ -3,14 +3,14 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 
 import "./ProfileCard.css";
-import {updateUserProfileAPI} from "../../store/services/authentication";
+import {updateUserProfileAPI, getProfileAPI} from "../../store/services/authentication";
 
 function ProfileCard(props) {
     const dispatch = useDispatch();
-    const [formData, setFormData] = useState({"name": null, "email": null});
+    const [formData, setFormData] = useState({"name": null, "email": props.userdetail.email});
 
     const submitHandler = () => {
-        dispatch(updateUserProfileAPI(formData))
+        dispatch(updateUserProfileAPI(formData));
     }
     
     return (
@@ -29,13 +29,13 @@ function ProfileCard(props) {
                                     <form class="form-inline text-dark" onSubmit={submitHandler}>
                                         <div class="form-group m-3">
                                             <label for="formGroupExampleInput">Name</label>
-                                            <input type="text" class="form-control mb-2 text-dark" id="formGroupExampleInput" placeholder="Example input" defaultValue={props.userdetail.name} onChange={(e)=>setFormData({"name":e.target.value})}/>
+                                            <input type="text" class="form-control mb-2 text-dark" id="formGroupExampleInput" placeholder="Example input" defaultValue={props.userdetail.name} onChange={(e)=>setFormData({"email": props.userdetail.email, "name":e.target.value})}/>
                                         </div>
                                         <div class="form-group m-3">
                                             <label for="formGroupExampleInput">Email Address</label>
-                                            <input type="text" class="form-control text-dark" id="formGroupExampleInput" placeholder="Example input" defaultValue={props.userdetail.email} onChange={(e)=>setFormData({"email":e.target.value})} />
+                                            <input type="text"  disabled={true} class="form-control text-dark" id="formGroupExampleInput" placeholder="Example input" defaultValue={props.userdetail.email} />
                                         </div>
-                                        <button type="submit" disabled={!formData.email && !formData.name} class="btn btn-primary m-3">Update</button>
+                                        <button type="submit" disabled={!formData.name} class="btn btn-primary m-3">Submit</button>
                                     </form>
                                 </div>
                             </div>
