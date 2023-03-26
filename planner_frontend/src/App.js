@@ -3,7 +3,9 @@ import './App.css';
 import './../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
-import { SignIn, SignUp, Index, Profile } from './pages/index';
+import PrivateRoute from "./component/PrivateRoute/index";
+
+import { SignIn, SignUp, Index, Profile, AboutUs } from './pages/index';
 
 
 function App() {
@@ -14,8 +16,9 @@ function App() {
         <Routes>
           <Route path="/" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
-          <Route path="/dashboard" element={<Index />} />
-          <Route path="/profile" element={<Profile />} />
+          <Route path="/dashboard" element={<PrivateRoute><Index /></PrivateRoute>} />
+          <Route path="/profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
+          <Route path="/about" element={<PrivateRoute><AboutUs /></PrivateRoute>} />
         </Routes>
       </BrowserRouter>
     </div>

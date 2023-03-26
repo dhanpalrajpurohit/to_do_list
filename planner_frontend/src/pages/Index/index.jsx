@@ -7,6 +7,7 @@ import './index.css';
 import Header from '../../component/header/Header';
 
 import { axiosInstance } from '../../Axios.jsx';
+import {getProfileAPI} from "../../store/services/authentication";
 
 
 let newDate = new Date();
@@ -20,12 +21,19 @@ let year = newDate.getFullYear();
 function Index() {
   const initialRender = useRef(true);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const token = localStorage.getItem('token');
   let [showInputText, setShowInputText] = React.useState(false);
   const { isLoading, isError, isSuccess, errorMsg, data } = useSelector((state) => state.user);;
   const [user, setUser] = React.useState({ "name": null, "email": null, "profile_picture": null });
   const [todoList, setTodoList] = React.useState([]);
   let [value, setValue] = React.useState();
+
+  useEffect(()=>{
+    if(!data){
+      dispatch(getProfileAPI());
+    }
+  }, [])
 
   useEffect(() => {
     if (!initialRender.current) {

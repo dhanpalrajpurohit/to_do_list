@@ -39,6 +39,7 @@ export const getUserSlice = createSlice({
 
         builder.addCase(getProfileAPI.fulfilled, (state, action) => {
             state.data = action.payload;
+            state.isSuccess = true;
         });
         builder.addCase(getProfileAPI.pending, (state, action) => {
             state.isLoading = true;

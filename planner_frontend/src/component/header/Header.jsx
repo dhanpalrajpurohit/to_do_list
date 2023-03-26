@@ -8,28 +8,17 @@ import './Header.css';
 import logo from '../../assets/img/logo.png';
 import {logoutAPI} from "../../store/services/authentication";
 
-function Header() {
-    let navigate = useNavigate();
+function Header(props) {
     const dispatch = useDispatch();
-    const initialRender = useRef(true);
-    const { isLoading, isError, isSuccess, errorMsg, data, token } = useSelector((state)=>state.user);
+    const navigate = useNavigate();
 
     const handleLogout = async() => {
         dispatch(logoutAPI());
+        navigate("/")
     }
 
-    useEffect(() => {
-        if(!initialRender.current) {
-            if(!token) {
-                localStorage.clear()
-                navigate("/");
-             }
-        } else {
-            initialRender.current = false;
-        }
-     }, [isSuccess]);
-
     return (
+
         <div className='container'>
             <div className='header'>
                 <nav className="navbar fw-bold header" >
@@ -39,9 +28,11 @@ function Header() {
                             <span className='text-white'>Planner</span>
                         </Link>
                     </div>
+                    {console.log({props})}
                     <div className="dropdown">
                         <button className="btn btn-light me-1 dropdown-toggle fw-bold" type="button" data-bs-toggle="dropdown" aria-expanded="true">
-                            {data.user.name}
+                            {props.userdetail.name}
+                            {console.log({props})}
                         </button>
                         <ul className="dropdown-menu" role="menu">
                             <li><Link to="/profile" className="dropdown-item">Profile</Link></li>

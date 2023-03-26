@@ -32,13 +32,13 @@ export const getUserAPI = createAsyncThunk("getUser", async (data, thunkAPI) => 
 export const getProfileAPI = createAsyncThunk("getProfileUser", async (thunkAPI) => {
     const response = await axiosInstance({
         url: "get-profile/",
-        method: "POST",
+        method: "GET",
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Token ${localStorage.getItem('token')}`
         },
     });
-    return response;
+    return await response.data;
 });
 
 export const updateUserProfileAPI = createAsyncThunk("userProfileUser", async (data, thunkAPI) => {
@@ -52,7 +52,7 @@ export const updateUserProfileAPI = createAsyncThunk("userProfileUser", async (d
         data: data,
     });
     
-    return response;
+    return await response.data;
 });
 
 export const logoutAPI = createAsyncThunk("logout", async(thunkAPI) => {
@@ -64,6 +64,10 @@ export const logoutAPI = createAsyncThunk("logout", async(thunkAPI) => {
             'Authorization': `Token ${localStorage.getItem('token')}`
         },
         data: {"token": localStorage.getItem('token')},
-    });
-    return response.data;
+    }).then((response)=>{
+        if(response.status==200){
+            return response.data;
+        }
+    }).
+    
 });

@@ -10,7 +10,9 @@ function ProfileCard(props) {
     const [formData, setFormData] = useState({"name": null, "email": props.userdetail.email});
 
     const submitHandler = () => {
+        debugger;
         dispatch(updateUserProfileAPI(formData));
+        dispatch(getProfileAPI());
     }
     
     return (
