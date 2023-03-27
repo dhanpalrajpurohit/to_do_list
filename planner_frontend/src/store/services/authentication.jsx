@@ -64,10 +64,7 @@ export const logoutAPI = createAsyncThunk("logout", async(thunkAPI) => {
             'Authorization': `Token ${localStorage.getItem('token')}`
         },
         data: {"token": localStorage.getItem('token')},
-    }).then((response)=>{
-        if(response.status==200){
-            return response.data;
-        }
-    }).
+    });
     
+    return await response.data;    
 });
