@@ -7,7 +7,7 @@ import './index.css';
 import Header from '../../component/header/Header';
 
 import { axiosInstance } from '../../Axios.jsx';
-import {getProfileAPI} from "../../store/services/authentication";
+import { getProfileAPI } from "../../store/services/authentication";
 
 
 let newDate = new Date();
@@ -24,31 +24,39 @@ function Index() {
   const dispatch = useDispatch();
   const token = localStorage.getItem('token');
   let [showInputText, setShowInputText] = React.useState(false);
-  const { isLoading, isError, isSuccess, errorMsg, data } = useSelector((state) => state.user);;
+  const data = useSelector((state) =>state.user.data);;
   const [user, setUser] = React.useState({ "name": null, "email": null, "profile_picture": null });
   const [todoList, setTodoList] = React.useState([]);
   let [value, setValue] = React.useState();
 
-  useEffect(()=>{
-    if(!data){
+  useEffect(() => {
+    if (!data) {
       dispatch(getProfileAPI());
+      setUser(data.user);
+    }
+    if (token && user.email == null) {
+      dispatch(getProfileAPI());
+      setUser(data.user);
     }
   }, [])
 
   useEffect(() => {
     if (!initialRender.current) {
-      if (isSuccess) {
+      if (data) {
         setUser(data.user);
       } else {
         navigate("/");
       }
     } else {
+      setUser(data.user);
       initialRender.current = false;
     }
+    setUser(data.user);
+    debugger;
     if (token === null) {
       navigate("/");
     }
-  }, [isSuccess]);
+  }, []);
 
   const handleComplete = (id) => {
     axiosInstance({
