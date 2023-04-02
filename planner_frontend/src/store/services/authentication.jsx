@@ -15,6 +15,20 @@ export const getTokenAPI = createAsyncThunk("getTokenAPI", async (data, thunkAPI
     return res_data;
 });
 
+export const signupAPI = async (data) => {
+    const response = await axiosInstance({
+        url: "signup/",
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        data: data,
+    });
+    if (response.status===200){
+        return response.data;
+    }
+};
+
 export const getUserAPI = createAsyncThunk("getUser", async (data, thunkAPI) => {
     const response = await axiosInstance({
         url: "signin/",

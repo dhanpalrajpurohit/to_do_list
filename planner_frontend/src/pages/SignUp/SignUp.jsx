@@ -1,49 +1,27 @@
-import React from 'react'
+import React, {useState} from 'react'
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from 'react-router-dom';
+
 
 import { Twitter, Facebook, Google } from 'react-bootstrap-icons';
 
 import './SignUp.css';
+import {signupAPI} from '../../store/services/authentication';
 
 function SignUp() {
+
+  const dispatch = useDispatch();
+  let navigate = useNavigate();
+
+  const [form, setForm] = useState({"email": null, "name": null, "password": null, "password2": null})
+
+  const submitHandler = async(e) => {
+    e.preventDefault();
+    signupAPI(form);
+    navigate("/");
+  }
+
   return (
-    // <div className='container'>
-    //   <div className='d-flex justify-content-center'>
-    //     <div className=''>
-    //       <div className='text-center'><h1 className='display-5'>Signup to Continue</h1></div>
-    //       <div>
-    //         <form>
-    //           <div class="mb-3">
-    //             <label for="txt_name" class="form-label">Name</label>
-    //             <input type="text" class="form-control" id="txt_name" />
-    //           </div>
-    //           <div class="mb-3">
-    //             <label for="txt_email" class="form-label">Email</label>
-    //             <input type="email" class="form-control" id="txt_email" />
-    //           </div>
-    //           <div class="mb-3">
-    //             <label for="txt_password" class="form-label">Password</label>
-    //             <input type="password" class="form-control" id="txt_password" />
-    //           </div>
-    //           <button type="submit" class="btn btn-primary">Submit</button>
-    //         </form>
-    //       </div>
-    //       <div>
-    //       </div>
-    //       <div class="seperator"><b>or</b></div>
-    //       <div className='social-icon' id="social-login">
-    //         <div className='pt-1 pb-1'>
-    //           <button type="submit" class="btn btn-primary">Google</button>
-    //         </div>
-    //         <div className='pt-1 pb-1'>
-    //           <button type="submit" class="btn btn-primary">Facebook</button>
-    //         </div>
-    //         <div className='pt-1 pb-1'>
-    //           <button type="submit" class="btn btn-primary">GitHub</button>
-    //         </div>
-    //       </div>
-    //     </div>
-    //   </div>
-    // </div>
     <div className='container p-5'>
       <div className='row p-5'>
         <div className='col-md-6'>
@@ -53,22 +31,22 @@ function SignUp() {
           <div>
             <h3>Sign Up</h3>
             <div>
-              <form className="w-75">
+              <form className="w-75" onSubmit={submitHandler}>
                 <div className="form-group mb-3">
-                  <label for="username">Username</label>
-                  <input type="text" className="form-control" id="username" placeholder='Username' />
+                  <label htmlFor="email">Email</label>
+                  <input type="email" className="form-control" id="email" placeholder='Email' onChange={(e)=>setForm({...form, "email": e.target.value})}/>
                 </div>
                 <div className="form-group mb-3">
-                  <label for="email">Email</label>
-                  <input type="email" className="form-control" id="email" placeholder='Email' />
+                  <label htmlFor="name">Name</label>
+                  <input type="text" className="form-control" id="name" placeholder='Full Name' onChange={(e)=>setForm({...form, "name": e.target.value})}/>
                 </div>
                 <div className="form-group mb-3">
-                  <label for="name">Name</label>
-                  <input type="text" className="form-control" id="name" placeholder='Full Name' />
+                  <label htmlFor="password">Password</label>
+                  <input type="password" className="form-control" id="password" placeholder='Password' onChange={(e)=>setForm({...form, "password": e.target.value})}/>
                 </div>
                 <div className="form-group mb-3">
-                  <label for="password">Password</label>
-                  <input type="password" className="form-control" id="password" placeholder='Password' />
+                  <label htmlFor="password">Confirm Password</label>
+                  <input type="password" className="form-control" id="confirm_password" placeholder='Confirm Password' onChange={(e)=>setForm({...form, "password2": e.target.value})}/>
                 </div>
                 <div className="form-check mb-3 p-0">
                   <span style={{ float: "right" }}>
@@ -76,16 +54,13 @@ function SignUp() {
                   </span>
                 </div>
                 <div>
-                  <button className="btn btn-primary" type="submit">Log In</button>
-
+                  <button className="btn btn-primary" type="submit">Sign Up</button>
                 </div>
                 <hr />
               </form>
             </div>
-            <div id="social-icons" className='d-flex flex-row justify-content-center w-75'>
-              <div className="mx-1"><button className='btn btn-lg social-icons-google'><Google /></button></div>
-              <div className="mx-1"><button className='btn btn-lg social-icons-facebook'><Facebook /></button></div>
-              <div className="mx-1"><button className='btn btn-lg social-icons-twitter'><Twitter /></button></div>
+            <div id="social-icons" className='d-grid gap-2 w-75'>
+              <div><button className='btn btn-lg social-icons-google w-100 rounded-pill'>Google</button></div>
             </div>
           </div>
         </div>

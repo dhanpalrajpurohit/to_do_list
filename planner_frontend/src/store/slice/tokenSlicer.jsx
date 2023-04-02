@@ -1,5 +1,5 @@
 import { createSlice} from '@reduxjs/toolkit';
-import {getTokenAPI, getUserAPI, getProfileAPI, updateUserProfileAPI, logoutAPI} from './../services/authentication';
+import {getTokenAPI, getUserAPI, getProfileAPI, updateUserProfileAPI, logoutAPI, signupAPI} from './../services/authentication';
 
 
 export const getUserSlice = createSlice({

@@ -1,18 +1,3 @@
-input[type="text"]{
-    background: transparent !important;
-    color:black !important;
-  }
-
-.btn-primary {
-    color: #fff;
-    background-color: #6c63ff;
-    border-color: #6c63ff;
-}
-
-.form-check-input:checked {
-    background-color: #6c63ff;
-    border-color: #0d6efd;
-}
 .social-icons-facebook{
     font-weight: bolder;
     color: white;
