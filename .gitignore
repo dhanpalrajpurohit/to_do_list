@@ -1,6 +1,7 @@
 venv/
 .env
 .idea/
+.vscode
 userAccounts/*/*.pyc
 .gitignore
 */*/*.pyc
