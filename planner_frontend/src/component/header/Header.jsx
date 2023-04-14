@@ -8,9 +8,10 @@ import './Header.css';
 import logo from '../../assets/img/logo.png';
 import {logoutAPI} from "../../store/services/authentication";
 
-function Header(props) {
+function Header() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const data = useSelector(state => state.user.data);;
 
     const handleLogout = async() => {
         dispatch(logoutAPI());
@@ -28,11 +29,10 @@ function Header(props) {
                             <span className='text-white'>Planner</span>
                         </Link>
                     </div>
-                    {console.log({props})}
+                    
                     <div className="dropdown">
                         <button className="btn btn-light me-1 dropdown-toggle fw-bold" type="button" data-bs-toggle="dropdown" aria-expanded="true">
-                            {props.userdetail.name}
-                            {console.log({props})}
+                            {data && data.user && data.user.name}
                         </button>
                         <ul className="dropdown-menu" role="menu">
                             <li><Link to="/profile" className="dropdown-item">Profile</Link></li>

@@ -1,24 +1,24 @@
 import React, {useState} from 'react'
-import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from 'react-router-dom';
 
 
-import { Twitter, Facebook, Google } from 'react-bootstrap-icons';
+// import { Twitter, Facebook, Google } from 'react-bootstrap-icons';
 
 import './SignUp.css';
 import {signupAPI} from '../../store/services/authentication';
 
 function SignUp() {
 
-  const dispatch = useDispatch();
   let navigate = useNavigate();
 
   const [form, setForm] = useState({"email": null, "name": null, "password": null, "password2": null})
 
   const submitHandler = async(e) => {
     e.preventDefault();
-    signupAPI(form);
-    navigate("/");
+    const response = await signupAPI(form);
+    if(response.status===200){
+      navigate("/");
+    }
   }
 
   return (

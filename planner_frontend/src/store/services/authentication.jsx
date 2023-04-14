@@ -24,9 +24,7 @@ export const signupAPI = async (data) => {
         },
         data: data,
     });
-    if (response.status===200){
-        return response.data;
-    }
+    return response;
 };
 
 export const getUserAPI = createAsyncThunk("getUser", async (data, thunkAPI) => {
@@ -52,7 +50,8 @@ export const getProfileAPI = createAsyncThunk("getProfileUser", async (thunkAPI)
             'Authorization': `Token ${localStorage.getItem('token')}`
         },
     });
-    return await response.data;
+    const res = await response.data;
+    return res;
 });
 
 export const updateUserProfileAPI = createAsyncThunk("userProfileUser", async (data, thunkAPI) => {

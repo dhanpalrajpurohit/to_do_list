@@ -2,12 +2,15 @@ import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from 'react-router-dom';
 import { Trash2Fill, SendFill } from 'react-bootstrap-icons';
+import { connect } from 'react-redux';
+
 
 import './index.css';
 import Header from '../../component/header/Header';
 
 import { axiosInstance } from '../../Axios.jsx';
 import { getProfileAPI } from "../../store/services/authentication";
+import { getTasksAPI, postTaskAPI } from "../../store/services/task";
 
 
 let newDate = new Date();
@@ -18,45 +21,45 @@ let month = newDate.getMonth();
 let day = newDate.getDay();
 let year = newDate.getFullYear();
 
+
 function Index() {
   const initialRender = useRef(true);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const token = localStorage.getItem('token');
   let [showInputText, setShowInputText] = React.useState(false);
-  const data = useSelector((state) =>state.user.data);;
+  const data = useSelector((state) => {return state.user.data});
+  const task = useSelector(state => state.task.data);
   const [user, setUser] = React.useState({ "name": null, "email": null, "profile_picture": null });
   const [todoList, setTodoList] = React.useState([]);
   let [value, setValue] = React.useState();
 
   useEffect(() => {
-    if (!data) {
-      dispatch(getProfileAPI());
-      setUser(data.user);
-    }
-    if (token && user.email == null) {
-      dispatch(getProfileAPI());
-      setUser(data.user);
-    }
-  }, [])
+    dispatch(getProfileAPI());
+  }, []);
 
   useEffect(() => {
-    if (!initialRender.current) {
-      if (data) {
-        setUser(data.user);
-      } else {
-        navigate("/");
-      }
-    } else {
-      setUser(data.user);
-      initialRender.current = false;
+    if (data != null && data != undefined) {
+      const updatedUser = {
+        "name": data.user.name,
+        "email": data.user.email,
+        "profile_picture": data.user.profile_picture,
+      };
+      setUser(updatedUser);
+      dispatch(getTasksAPI(updatedUser));
     }
-    setUser(data.user);
-    debugger;
-    if (token === null) {
-      navigate("/");
-    }
-  }, []);
+  }, [data]);
+
+//   useEffect(() => {
+//     setUser(data.user);
+//     if(user!=null || user!=undefined) dispatch(getTasksAPI(user));
+// }, [user]);
+
+
+
+  useEffect(() => {
+    if(task!=null)  setTodoList(task);
+  }, [task]);
 
   const handleComplete = (id) => {
     axiosInstance({
@@ -81,45 +84,7 @@ function Index() {
     });
   }
 
-  const handleClick = () => {
-    const id = todoList.length + 1;
-    let data = {}
-    if (value !== "") {
-      data = {
-        id: id,
-        title: value,
-        complete: false,
-      }
-      setTodoList((prev) => [
-        ...prev,
-        data
-      ]);
-      axiosInstance({
-        url: `tasks/${user.email}/`,
-        method: "POST",
-        data: data,
-        headers: {
-          'Authorization': `token ${localStorage.getItem('token')}`
-        }
-      }).then((response) => {
-        if (response.status === 200) {
-          return axiosInstance({
-            url: `tasks/${user.email}/`,
-            method: "GET",
-            headers: {
-              'Authorization': `token ${localStorage.getItem('token')}`
-            }
-          }).then((response) => {
-            const data = response.data;
-            setTodoList(data.tasks);
-          });
-        }
-      });
-    }
-    setValue("");
-  };
-
-
+  const handleClick = () => { }
   return (
     <div>
       <Header userdetail={user} />
@@ -133,19 +98,21 @@ function Index() {
                   <h6 className='text-muted text-center'>{monthlist[month]} {date}, {year} </h6>
                   <div className='p-3'>
                     <ul className='list-group'>
-                      {todoList.map((todo, index) => {
-                        return (
-                          <li key={index} className="row shadow-sm">
-                            <div className="form-check col-9 m-3">
-                              <input className="form-check-input pt-1" type="checkbox" value="" id="flexCheckDefault" />
-                              <label className="form-check-label pt-1 card-subtitle form-check-label border-0 text-dark" for="flexCheckDefault">
-                                {todo.title}
-                              </label>
-                            </div>
-                            <button className='btn justify-content-right col-auto' onClick={() => handleComplete(todo.id)}><Trash2Fill className='global-icons-color' /></button>
-                          </li>
-                        )
-                      })}
+                      {
+                        todoList.map((todo, index) => {
+                          return (
+                            <li key={index} className="row shadow-sm">
+                              <div className="form-check col-9 m-3">
+                                <input className="form-check-input pt-1" type="checkbox" value="" id="flexCheckDefault" />
+                                <label className="form-check-label pt-1 card-subtitle form-check-label border-0 text-dark" for="flexCheckDefault">
+                                  {todo.title}
+                                </label>
+                              </div>
+                              <button className='btn justify-content-right col-auto' onClick={() => handleComplete(todo.id)}><Trash2Fill className='global-icons-color' /></button>
+                            </li>
+                          )
+                        })
+                      }
                     </ul>
                     {showInputText && <div className="input-group mt-3">
                       <input type="text" value={value} className="form-control text-dark" placeholder="Enter here..." aria-describedby="button-addon2" onChange={(e) => setValue(e.target.value)} />
@@ -166,3 +133,4 @@ function Index() {
 }
 
 export default Index;
+
