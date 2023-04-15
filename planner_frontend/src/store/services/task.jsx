@@ -58,11 +58,10 @@ export const getSingleTaskAPI = async(data) => {
     return res_data;
 }
 
-
-export const updateSingleTaskAPI = async(data) => {
+export const  updateSingleTaskAPI = createAsyncThunk("updateSingleTaskAPI", async (data, thunkAPI) => {
     const response =  await axiosInstance({
-        url: `tasks/${data.email}/${data.task_id}`,
-        method: "POST",
+        url: `tasks/${data.email}/${data.id}/`,
+        method: "PUT",
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Token ${localStorage.getItem('token')}`
@@ -71,7 +70,7 @@ export const updateSingleTaskAPI = async(data) => {
     });
     const res_data = await response.json();
     return res_data;
-}
+});
 
 
 export const deleteSingleTaskAPI = async(data) => {

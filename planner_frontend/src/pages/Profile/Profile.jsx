@@ -1,28 +1,34 @@
-import React, { useEffect, useRef,useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 
 
 import Header from '../../component/header/Header';
 import ProfileCard from '../../component/ProfileCard/ProfileCard';
-import { getTokenAPI, updateUserProfileAPI, getProfileAPI } from '../../store/services/authentication';
+import { updateUserProfileAPI, getProfileAPI } from '../../store/services/authentication';
 
-
-import { axiosInstance } from '../../Axios.jsx';
 
 
 function Profile() {
-    let navigate = useNavigate();
     const dispatch = useDispatch();
-    const token = localStorage.getItem('token');
-    const initialRender = useRef(true);
     const data = useSelector((state) =>state.user.data);;
     const [user, setUser] = useState({ "name": null, "email": null, "profile_picture": null });
     const [formData, setFormData] = useState({"name": null, "email": user.email});
 
-    useEffect(()=>{
-        setUser(data.user);
-    },[dispatch]);
+    useEffect(() => {
+        dispatch(getProfileAPI());
+      }, [dispatch]);
+
+      useEffect(() => {
+        if (data !== null && data !== undefined) {
+          const updatedUser = {
+            "name": data.user.name,
+            "email": data.user.email,
+            "profile_picture": data.user.profile_picture,
+          };
+          setUser(updatedUser);
+        }
+      }, [data]);
 
     const submitHandler = async(e) => {
         e.preventDefault();

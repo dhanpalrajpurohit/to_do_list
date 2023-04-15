@@ -37,3 +37,9 @@ input[type="text"]{
     border: 0;
     border-style: none;
 }
+
+
+.strikeThrough {
+  text-decoration: line-through;
+  color: red;
+}

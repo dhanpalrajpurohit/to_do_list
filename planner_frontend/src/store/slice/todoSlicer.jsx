@@ -35,15 +35,15 @@ const taskSlice = createSlice({
         // });
 
 
-        // builder.addCase(getSingleTaskAPI.fulfilled, (state, action) => {
-        //     state.data = action.payload;
-        // });
-        // builder.addCase(getSingleTaskAPI.pending, (state, action) => {
-        //     state.isLoading = true;
-        // });
-        // builder.addCase(getSingleTaskAPI.rejected, (state, action) => {
-        //     state.isError = true;
-        // });
+        builder.addCase(updateSingleTaskAPI.fulfilled, (state, action) => {
+            state.data = action.payload;
+        });
+        builder.addCase(updateSingleTaskAPI.pending, (state, action) => {
+            state.error = true;
+        });
+        builder.addCase(updateSingleTaskAPI.rejected, (state, action) => {
+            state.error = action.payload;;
+        });
 
     }
 })
