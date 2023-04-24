@@ -11,7 +11,7 @@ const taskSlice = createSlice({
 
     extraReducers: (builder) => {
         builder.addCase(getTasksAPI.fulfilled, (state, action) => {
-            state.data = action.payload["tasks"]
+            state.data = action.payload;
         });
         builder.addCase(getTasksAPI.pending, (state, action) => {
             state.error = null;
@@ -36,6 +36,7 @@ const taskSlice = createSlice({
 
 
         builder.addCase(updateSingleTaskAPI.fulfilled, (state, action) => {
+            console.log(action.payload);
             state.data = action.payload;
         });
         builder.addCase(updateSingleTaskAPI.pending, (state, action) => {

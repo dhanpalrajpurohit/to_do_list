@@ -11,7 +11,7 @@ import {logoutAPI} from "../../store/services/authentication";
 function Header() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const data = useSelector(state => state.user.data);;
+    const data = useSelector(state => state.user.data);
 
     const handleLogout = async() => {
         dispatch(logoutAPI());

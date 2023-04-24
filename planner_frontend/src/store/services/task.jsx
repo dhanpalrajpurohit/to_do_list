@@ -26,8 +26,7 @@ export const getTasksAPI = createAsyncThunk("getTasksAPI", async (data, thunkAPI
         },
         data: data,
     });
-    const res = await response.data; 
-    return res;
+    return response.data.tasks;
 });
 
 export const postTaskAPI = async(data) => {
@@ -40,7 +39,7 @@ export const postTaskAPI = async(data) => {
         },
         data: data,
     });
-    return await response.data;
+    return response.data;
 }
 
 

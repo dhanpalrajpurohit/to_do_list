@@ -50,8 +50,7 @@ export const getProfileAPI = createAsyncThunk("getProfileUser", async (thunkAPI)
             'Authorization': `Token ${localStorage.getItem('token')}`
         },
     });
-    const res = await response.data;
-    return res;
+    return response.data;
 });
 
 export const updateUserProfileAPI = createAsyncThunk("userProfileUser", async (data, thunkAPI) => {

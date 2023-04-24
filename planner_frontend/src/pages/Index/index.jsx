@@ -23,37 +23,45 @@ let year = newDate.getFullYear();
 function Index() {
   const dispatch = useDispatch();
   let [showInputText, setShowInputText] = React.useState(false);
-  const data = useSelector((state) => { return state.user.data });
-  const task = useSelector(state => state.task.data);
-  const [user, setUser] = React.useState({ "name": null, "email": null, "profile_picture": null });
+  const userState = useSelector(state => state.user.data);
+  const tasksState = useSelector(state => state.task.data);
   const [todoList, setTodoList] = React.useState([]);
   let [value, setValue] = React.useState();
 
   useEffect(() => {
-    dispatch(getProfileAPI());
+    const fetchTodo = async () => {
+      dispatch(getProfileAPI());
+      if (userState && userState.user && userState.user.email) {
+        dispatch(getTasksAPI(userState.user));
+        setTodoList(tasksState);
+      }
+    }
+    fetchTodo();
   }, [dispatch]);
 
   useEffect(() => {
-    if (data !== null && data !== undefined) {
-      const updatedUser = {
-        "name": data.user.name,
-        "email": data.user.email,
-        "profile_picture": data.user.profile_picture,
-      };
-      setUser(updatedUser);
-      dispatch(getTasksAPI(updatedUser));
+    const fetchTodo = async () => {
+      if (userState && userState.user && userState.user.email) {
+        dispatch(getTasksAPI(userState.user));
+        setTodoList(tasksState);
+      }
     }
-  }, [dispatch, data]);
+    fetchTodo();
+  }, [userState]);
 
-
-
-  useEffect(() => {
-    setTodoList(task);
-  }, [task]);
+  // useEffect(() => {
+  //   const fetchTodo = async () => {
+  //     if (data && data.user && (data.user.email !== undefined && data.user.email !== null)) {
+  //       await dispatch(getTasksAPI(data.user));
+  //       setTodoList(task);
+  //     }
+  //   }
+  //   fetchTodo();
+  // }, [task]);
 
   const handleComplete = (id) => {
     axiosInstance({
-      url: `task/${user.email}/${id}/`,
+      url: `task/${userState.user.email}/${id}/`,
       method: "DELETE",
       headers: {
         'Authorization': `token ${localStorage.getItem('token')}`
@@ -61,7 +69,7 @@ function Index() {
     }).then((response) => {
       if (response.status === 204) {
         return axiosInstance({
-          url: `tasks/${user.email}/`,
+          url: `tasks/${userState.user.email}/`,
           method: "GET",
           headers: {
             'Authorization': `token ${localStorage.getItem('token')}`
@@ -76,53 +84,48 @@ function Index() {
 
   const handleClick = (todo) => {
     const data = {
-      "email": user.email,
+      "email": userState.user.email,
       "id": todo.id,
       "is_completed": !todo.is_completed,
       "title": todo.title
     }
-    dispatch(updateSingleTaskAPI(data));
-    console.log({task})
-    setTodoList(task);
-    console.log(todoList)
-    console.log({task})
+    dispatch(updateSingleTaskAPI(userState));
+    setTodoList(tasksState);
   }
 
-  const listView = (<ul className='list-group'>
-    {
-      todoList.map((todo, index) => {
-        return (
-          <li key={index} className="row shadow-sm">
-            <div className="form-check col-9 m-3">
-              {
-                todo.is_completed &&
-                (<div>
-                  <input className="form-check-input pt-1" type="checkbox" checked id="flexCheckDefault" onClick={() => handleClick(todo)} />
-                  <label className="form-check-label pt-1 card-subtitle form-check-label border-0 text-dark strikeThrough" for="flexCheckDefault">
-                    {todo.title}
-                  </label>
-                </div>)
-              }
-              {
-                !todo.is_completed &&
-                (<div>
-                  <input className="form-check-input pt-1" type="checkbox" id="flexCheckDefault" onClick={() => handleClick(todo)} />
-                  <label className="form-check-label pt-1 card-subtitle form-check-label border-0 text-dark" for="flexCheckDefault">
-                    {todo.title}
-                  </label>
-                </div>)
-              }
-            </div>
-            <button className='btn justify-content-right col-auto' onClick={() => handleComplete(todo.id)}><Trash2Fill className='global-icons-color' /></button>
-          </li>
-        )
-      })
-    }
-  </ul>)
+  const todoListView = (
+    todoList !== null && todoList !== [] && todoList.map((todo, index) => {
+      return (
+        <li key={index} className="row shadow-sm">
+          <div className="form-check col-9 m-3">
+            {
+              todo.is_completed &&
+              (<div>
+                <input className="form-check-input pt-1" type="checkbox" checked id="flexCheckDefault" onClick={() => handleClick(todo)} />
+                <label className="form-check-label pt-1 card-subtitle form-check-label border-0 text-dark strikeThrough" for="flexCheckDefault">
+                  {todo.title}
+                </label>
+              </div>)
+            }
+            {
+              !todo.is_completed &&
+              (<div>
+                <input className="form-check-input pt-1" type="checkbox" id="flexCheckDefault" onClick={() => handleClick(todo)} />
+                <label className="form-check-label pt-1 card-subtitle form-check-label border-0 text-dark" for="flexCheckDefault">
+                  {todo.title}
+                </label>
+              </div>)
+            }
+          </div>
+          <button className='btn justify-content-right col-auto' onClick={() => handleComplete(todo.id)}><Trash2Fill className='global-icons-color' /></button>
+        </li>
+      )
+    })
+  )
 
   return (
     <div>
-      <Header userdetail={user} />
+      <Header />
       <div className="container-fluid">
         <div className="row">
           <div className="col-sm-6 text-white mx-auto m-3">
@@ -132,7 +135,9 @@ function Index() {
                   <h5 className="card-header">{weekdays[day]}</h5>
                   <h6 className='text-muted text-center'>{monthlist[month]} {date}, {year} </h6>
                   <div className='p-3'>
-                    {listView}
+                    <ul className='list-group'>
+                      {todoListView}
+                    </ul>
                     {showInputText && <div className="input-group mt-3">
                       <input type="text" value={value} className="form-control text-dark" placeholder="Enter here..." aria-describedby="button-addon2" onChange={(e) => setValue(e.target.value)} />
                       <button className="btn" type="button" onClick={() => handleClick()}><SendFill className='global-icons-color' /></button>
