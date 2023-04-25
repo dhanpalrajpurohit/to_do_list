@@ -26,7 +26,8 @@ export const getTasksAPI = createAsyncThunk("getTasksAPI", async (data, thunkAPI
         },
         data: data,
     });
-    return response.data.tasks;
+    const res = await response.data["tasks"];
+    return res;
 });
 
 export const postTaskAPI = async(data) => {

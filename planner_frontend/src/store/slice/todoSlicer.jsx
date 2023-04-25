@@ -36,7 +36,6 @@ const taskSlice = createSlice({
 
 
         builder.addCase(updateSingleTaskAPI.fulfilled, (state, action) => {
-            console.log(action.payload);
             state.data = action.payload;
         });
         builder.addCase(updateSingleTaskAPI.pending, (state, action) => {

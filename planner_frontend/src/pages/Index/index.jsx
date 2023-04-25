@@ -43,21 +43,19 @@ function Index() {
     const fetchTodo = async () => {
       if (userState && userState.user && userState.user.email) {
         dispatch(getTasksAPI(userState.user));
-        setTodoList(tasksState);
+        if(tasksState!==null){
+          setTodoList(tasksState);
+        }
       }
     }
     fetchTodo();
   }, [userState]);
 
-  // useEffect(() => {
-  //   const fetchTodo = async () => {
-  //     if (data && data.user && (data.user.email !== undefined && data.user.email !== null)) {
-  //       await dispatch(getTasksAPI(data.user));
-  //       setTodoList(task);
-  //     }
-  //   }
-  //   fetchTodo();
-  // }, [task]);
+  useEffect(() => {
+    if(tasksState!==null){
+      setTodoList(tasksState);
+    }
+  }, [tasksState]);
 
   const handleComplete = (id) => {
     axiosInstance({
@@ -102,7 +100,7 @@ function Index() {
               todo.is_completed &&
               (<div>
                 <input className="form-check-input pt-1" type="checkbox" checked id="flexCheckDefault" onClick={() => handleClick(todo)} />
-                <label className="form-check-label pt-1 card-subtitle form-check-label border-0 text-dark strikeThrough" for="flexCheckDefault">
+                <label className="form-check-label pt-1 card-subtitle form-check-label border-0 text-dark strikeThrough" htmlFor="flexCheckDefault">
                   {todo.title}
                 </label>
               </div>)
@@ -111,7 +109,7 @@ function Index() {
               !todo.is_completed &&
               (<div>
                 <input className="form-check-input pt-1" type="checkbox" id="flexCheckDefault" onClick={() => handleClick(todo)} />
-                <label className="form-check-label pt-1 card-subtitle form-check-label border-0 text-dark" for="flexCheckDefault">
+                <label className="form-check-label pt-1 card-subtitle form-check-label border-0 text-dark" htmlFor="flexCheckDefault">
                   {todo.title}
                 </label>
               </div>)

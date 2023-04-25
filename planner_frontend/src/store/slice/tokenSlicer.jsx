@@ -36,20 +36,20 @@ export const getUserSlice = createSlice({
             state.isError = true;
         });
 
-        builder.addCase(logoutAPI.fulfilled, (state, action) => {
-            state.isLoading = false;
-            state.isError = false;
-            state.isSuccess = true;
-            state.errorMsg = null;
-            state.data = null;
-            state.token = null;
-        });
-        builder.addCase(logoutAPI.pending, (state, action) => {
-            state.isLoading = true;
-        });
-        builder.addCase(logoutAPI.rejected, (state, action) => {
-            state.isError = true;
-        });
+        // builder.addCase(logoutAPI.fulfilled, (state, action) => {
+        //     state.isLoading = false;
+        //     state.isError = false;
+        //     state.isSuccess = true;
+        //     state.errorMsg = null;
+        //     state.data = null;
+        //     state.token = null;
+        // });
+        // builder.addCase(logoutAPI.pending, (state, action) => {
+        //     state.isLoading = true;
+        // });
+        // builder.addCase(logoutAPI.rejected, (state, action) => {
+        //     state.isError = true;
+        // });
     }
 })
 

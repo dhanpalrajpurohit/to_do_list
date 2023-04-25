@@ -27,7 +27,7 @@ export const signupAPI = async (data) => {
     return response;
 };
 
-export const getUserAPI = createAsyncThunk("getUser", async (data, thunkAPI) => {
+export const getUserAPI = createAsyncThunk("getUserAPI", async (data, thunkAPI) => {
     const response = await axiosInstance({
         url: "signin/",
         method: "POST",
@@ -67,8 +67,8 @@ export const updateUserProfileAPI = createAsyncThunk("userProfileUser", async (d
     return await response.data;
 });
 
-export const logoutAPI = createAsyncThunk("logout", async(thunkAPI) => {
-    const response = await axiosInstance({
+export const logoutAPI = () => {
+    axiosInstance({
         url: "logout/",
         method: "POST",
         headers: {
@@ -76,7 +76,5 @@ export const logoutAPI = createAsyncThunk("logout", async(thunkAPI) => {
             'Authorization': `Token ${localStorage.getItem('token')}`
         },
         data: {"token": localStorage.getItem('token')},
-    });
-    
-    return await response.data;    
-});
+    })
+}

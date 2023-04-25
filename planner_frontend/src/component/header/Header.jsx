@@ -13,9 +13,11 @@ function Header() {
     const navigate = useNavigate();
     const data = useSelector(state => state.user.data);
 
-    const handleLogout = async() => {
-        dispatch(logoutAPI());
-        navigate("/")
+    const handleLogout = () => {
+        logoutAPI();
+        navigate("/");
+        localStorage.clear();
+        
     }
 
     return (
