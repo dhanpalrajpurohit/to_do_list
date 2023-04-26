@@ -19,21 +19,6 @@ function SignIn() {
 
   const [details, setDetails] = React.useState({ "email": "", "password": "" });
   const [errorMessage, setErrorMessage] = React.useState({ "email": "", "password": "", "default": "" });
-  const { isLoading, isError, isSuccess, errorMsg, data } = useSelector((state)=>state.user);
-
-
-  useEffect(() => {
-    if(!initialRender.current) {
-        if(isSuccess) {
-          navigate("/dashboard");
-         } else {
-            navigate("/")
-         }
-    } else {
-        initialRender.current = false;
-    }
- }, [isSuccess]);
-
 
   const submitHandler = async(e) => {
     e.preventDefault();
@@ -43,6 +28,7 @@ function SignIn() {
         if(response.payload && response.payload["token"]){
           localStorage.setItem("token", response.payload["token"])
           dispatch(getUserAPI(details));
+          navigate("/dashboard");
         } 
       }
   }
@@ -111,10 +97,8 @@ function SignIn() {
                 <hr />
               </form>
             </div>
-            <div id="social-icons" className='d-flex flex-row justify-content-center w-75'>
-              <div className="mx-1"><button className='btn btn-lg social-icons-google'><Google /></button></div>
-              <div className="mx-1"><button className='btn btn-lg social-icons-facebook'><Facebook /></button></div>
-              <div className="mx-1"><button className='btn btn-lg social-icons-twitter'><Twitter /></button></div>
+            <div id="social-icons" className='d-grid gap-2 w-75'>
+              <div><button className='btn btn-lg social-icons-google w-100 rounded-pill'>Google</button></div>
             </div>
           </div>
         </div>

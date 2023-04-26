@@ -2,9 +2,23 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { axiosInstance } from '../../Axios';
 
-export const getTasksAPI = async(data) => {
+// export const getTasksAPI = async(data) => {
+//     const response =  await axiosInstance({
+//         url: `tasks/${data.email}/`,
+//         method: "GET",
+//         headers: {
+//             'Content-Type': 'application/json',
+//             'Authorization': `Token ${localStorage.getItem('token')}`
+//         },
+//         data: data,
+//     });
+//     return await response.data;
+// }
+
+
+export const getTasksAPI = createAsyncThunk("getTasksAPI", async (data, thunkAPI) => {
     const response =  await axiosInstance({
-        url: `tasks/${data.email}`,
+        url: `tasks/${data.email}/`,
         method: "GET",
         headers: {
             'Content-Type': 'application/json',
@@ -12,14 +26,13 @@ export const getTasksAPI = async(data) => {
         },
         data: data,
     });
-    const res_data = await response.json();
-    return res_data;
-}
-
+    const res = await response.data["tasks"];
+    return res;
+});
 
 export const postTaskAPI = async(data) => {
     const response =  await axiosInstance({
-        url: `tasks/${data.email}`,
+        url: `tasks/${data.email}/`,
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
@@ -27,8 +40,7 @@ export const postTaskAPI = async(data) => {
         },
         data: data,
     });
-    const res_data = await response.json();
-    return res_data;
+    return response.data;
 }
 
 
@@ -46,11 +58,10 @@ export const getSingleTaskAPI = async(data) => {
     return res_data;
 }
 
-
-export const updateSingleTaskAPI = async(data) => {
+export const  updateSingleTaskAPI = createAsyncThunk("updateSingleTaskAPI", async (data, thunkAPI) => {
     const response =  await axiosInstance({
-        url: `tasks/${data.email}/${data.task_id}`,
-        method: "POST",
+        url: `tasks/${data.email}/${data.id}/`,
+        method: "PUT",
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Token ${localStorage.getItem('token')}`
@@ -59,7 +70,7 @@ export const updateSingleTaskAPI = async(data) => {
     });
     const res_data = await response.json();
     return res_data;
-}
+});
 
 
 export const deleteSingleTaskAPI = async(data) => {
@@ -75,3 +86,4 @@ export const deleteSingleTaskAPI = async(data) => {
     const res_data = await response.json();
     return res_data;
 }
+
