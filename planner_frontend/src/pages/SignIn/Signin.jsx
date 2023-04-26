@@ -19,21 +19,6 @@ function SignIn() {
 
   const [details, setDetails] = React.useState({ "email": "", "password": "" });
   const [errorMessage, setErrorMessage] = React.useState({ "email": "", "password": "", "default": "" });
-  const { isLoading, isError, isSuccess, errorMsg, data } = useSelector((state)=>state.user);
-
-
-  useEffect(() => {
-    if(!initialRender.current) {
-        if(isSuccess) {
-          navigate("/dashboard");
-         } else {
-            navigate("/")
-         }
-    } else {
-        initialRender.current = false;
-    }
- }, [isSuccess]);
-
 
   const submitHandler = async(e) => {
     e.preventDefault();
@@ -43,6 +28,7 @@ function SignIn() {
         if(response.payload && response.payload["token"]){
           localStorage.setItem("token", response.payload["token"])
           dispatch(getUserAPI(details));
+          navigate("/dashboard");
         } 
       }
   }

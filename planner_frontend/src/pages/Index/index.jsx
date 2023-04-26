@@ -5,6 +5,7 @@ import { Trash2Fill, SendFill } from 'react-bootstrap-icons';
 
 import './index.css';
 import Header from '../../component/header/Header';
+import ListView from '../../component/ListView/ListView';
 
 import { axiosInstance } from '../../Axios.jsx';
 import { getProfileAPI } from "../../store/services/authentication";
@@ -87,8 +88,8 @@ function Index() {
       "is_completed": !todo.is_completed,
       "title": todo.title
     }
-    dispatch(updateSingleTaskAPI(userState));
-    setTodoList(tasksState);
+    dispatch(updateSingleTaskAPI(data));
+    dispatch(getTasksAPI(userState.user));
   }
 
   const todoListView = (
@@ -134,7 +135,7 @@ function Index() {
                   <h6 className='text-muted text-center'>{monthlist[month]} {date}, {year} </h6>
                   <div className='p-3'>
                     <ul className='list-group'>
-                      {todoListView}
+                      <ListView todos={todoList} removeTodo={handleComplete} completeTodo={handleClick}/>
                     </ul>
                     {showInputText && <div className="input-group mt-3">
                       <input type="text" value={value} className="form-control text-dark" placeholder="Enter here..." aria-describedby="button-addon2" onChange={(e) => setValue(e.target.value)} />
