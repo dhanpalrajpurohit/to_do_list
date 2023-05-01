@@ -41,6 +41,7 @@ function Index() {
   }, [dispatch]);
 
   useEffect(() => {
+    console.log(userState);
     const fetchTodo = async () => {
       if (userState && userState.user && userState.user.email) {
         dispatch(getTasksAPI(userState.user));
@@ -89,7 +90,6 @@ function Index() {
       "title": todo.title
     }
     dispatch(updateSingleTaskAPI(data));
-    dispatch(getTasksAPI(userState.user));
   }
 
   const todoListView = (
