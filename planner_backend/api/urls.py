@@ -20,7 +20,7 @@ urlpatterns = [
     path("get-profile/", UserProfileView.as_view(), name="user-profile"),
     path("tasks/<str:email_address>/", TasksViewSet.as_view(), name="get-task-list"),
     path(
-        "tasks/<str:email_address>/<int:task_id>/",
+        "task/<str:email_address>/<int:task_id>/",
         TaskViewSet.as_view(),
         name="get-task",
     ),

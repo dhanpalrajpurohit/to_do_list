@@ -20,26 +20,28 @@ function ListView({ todos, removeTodo, completeTodo }) {
         setTodoList(tasksState);
     }, [tasksState]);
 
+    const todoTitle = (todo) => (
+        todo.is_completed ?
+            <label className="form-check-label pt-1 card-subtitle form-check-label border-0 text-dark strikeThrough" for="flexCheckDefault">
+                {todo.title}
+            </label> :
+            <label className="form-check-label pt-1 card-subtitle form-check-label border-0 text-dark" for="flexCheckDefault">
+                {todo.title}
+            </label>
+    )
+
     const renderTodo = () => todoList && todoList.length > 0 && todoList?.map((todo, index) => {
         return (
             <li key={index} className="row shadow-sm">
                 <div className="form-check col-9 m-3">
                     {
-                        todo.is_completed ?
                         (<div>
-                            <input className="form-check-input pt-1" type="checkbox" checked id="flexCheckDefault" onClick={() => completeTodo(todo)} />
-                            <label className="form-check-label pt-1 card-subtitle form-check-label border-0 text-dark strikeThrough" for="flexCheckDefault">
-                                {todo.title}
-                            </label>
-                        </div>):(<div>
-                            <input className="form-check-input pt-1" type="checkbox" id="flexCheckDefault" onClick={() => completeTodo(todo)} />
-                            <label className="form-check-label pt-1 card-subtitle form-check-label border-0 text-dark" for="flexCheckDefault">
-                                {todo.title}
-                            </label>
-                        </div>)
+                            {/* <input className="form-check-input pt-1" type="checkbox" checked id="flexCheckDefault" onClick={() => completeTodo(todo)} /> */}
+                            {todoTitle(todo)}
+                        </div>) 
                     }
                 </div>
-                <button className='btn justify-content-right col-auto' onClick={() => removeTodo(todo.id)}><Trash2Fill className='global-icons-color' /></button>
+                <button className='btn justify-content-right col-auto' onClick={() => removeTodo(todo)}><Trash2Fill className='global-icons-color' /></button>
             </li>
         )
     })
@@ -47,7 +49,7 @@ function ListView({ todos, removeTodo, completeTodo }) {
     return (
         <ul className='list-group'>
             {
-                tasksState?.length > 0 ? renderTodo():null
+                tasksState?.length > 0 ? renderTodo() : null
             }
         </ul>
     )

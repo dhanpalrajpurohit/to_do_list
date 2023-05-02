@@ -17,7 +17,7 @@ import { axiosInstance } from '../../Axios';
 
 
 export const getTasksAPI = createAsyncThunk("getTasksAPI", async (data, thunkAPI) => {
-    const response =  await axiosInstance({
+    const response = await axiosInstance({
         url: `tasks/${data.email}/`,
         method: "GET",
         headers: {
@@ -30,8 +30,8 @@ export const getTasksAPI = createAsyncThunk("getTasksAPI", async (data, thunkAPI
     return res;
 });
 
-export const postTaskAPI = async(data) => {
-    const response =  await axiosInstance({
+export const postTaskAPI = createAsyncThunk("postTaskAPI", async (data, thunkAPI) => {
+    const response = await axiosInstance({
         url: `tasks/${data.email}/`,
         method: "POST",
         headers: {
@@ -40,12 +40,13 @@ export const postTaskAPI = async(data) => {
         },
         data: data,
     });
-    return response.data;
-}
+    const res = await response.data;
+    return res;
+});
 
 
-export const getSingleTaskAPI = async(data) => {
-    const response =  await axiosInstance({
+export const getSingleTaskAPI = async (data) => {
+    const response = await axiosInstance({
         url: `tasks/${data.email}/${data.task_id}`,
         method: "POST",
         headers: {
@@ -58,8 +59,8 @@ export const getSingleTaskAPI = async(data) => {
     return res_data;
 }
 
-export const  updateSingleTaskAPI = createAsyncThunk("updateSingleTaskAPI", async (data, thunkAPI) => {
-    const response =  await axiosInstance({
+export const updateSingleTaskAPI = createAsyncThunk("updateSingleTaskAPI", async (data, thunkAPI) => {
+    const response = await axiosInstance({
         url: `tasks/${data.email}/${data.id}/`,
         method: "PUT",
         headers: {
@@ -73,9 +74,9 @@ export const  updateSingleTaskAPI = createAsyncThunk("updateSingleTaskAPI", asyn
 });
 
 
-export const deleteSingleTaskAPI = async(data) => {
-    const response =  await axiosInstance({
-        url: `tasks/${data.email}/${data.task_id}`,
+export const deleteSingleTaskAPI = createAsyncThunk("deleteSingleTaskAPI", async (data, thunkAPI) =>{
+    const response = await axiosInstance({
+        url: `task/${data.email}/${data.id}/`,
         method: "DELETE",
         headers: {
             'Content-Type': 'application/json',
@@ -83,7 +84,7 @@ export const deleteSingleTaskAPI = async(data) => {
         },
         data: data,
     });
-    const res_data = await response.json();
+    const res_data = await response.data;
     return res_data;
-}
+});
 

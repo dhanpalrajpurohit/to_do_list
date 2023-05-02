@@ -9,7 +9,7 @@ import ListView from '../../component/ListView/ListView';
 
 import { axiosInstance } from '../../Axios.jsx';
 import { getProfileAPI } from "../../store/services/authentication";
-import { getTasksAPI, updateSingleTaskAPI } from "../../store/services/task";
+import { getTasksAPI, updateSingleTaskAPI, postTaskAPI, deleteSingleTaskAPI } from "../../store/services/task";
 
 
 let newDate = new Date();
@@ -27,6 +27,7 @@ function Index() {
   const userState = useSelector(state => state.user.data);
   const tasksState = useSelector(state => state.task.data);
   const [todoList, setTodoList] = React.useState([]);
+  const [todos, setTodos] = React.useState();
   let [value, setValue] = React.useState();
 
   useEffect(() => {
@@ -35,6 +36,9 @@ function Index() {
       if (userState && userState.user && userState.user.email) {
         dispatch(getTasksAPI(userState.user));
         setTodoList(tasksState);
+        setTodos(
+          <ListView todos={todoList} removeTodo={handleComplete} completeTodo={handleClick} />
+        )
       }
     }
     fetchTodo();
@@ -45,8 +49,11 @@ function Index() {
     const fetchTodo = async () => {
       if (userState && userState.user && userState.user.email) {
         dispatch(getTasksAPI(userState.user));
-        if(tasksState!==null){
+        if (tasksState !== null) {
           setTodoList(tasksState);
+          setTodos(
+            <ListView todos={todoList} removeTodo={handleComplete} completeTodo={handleClick} />
+          )
         }
       }
     }
@@ -54,35 +61,30 @@ function Index() {
   }, [userState]);
 
   useEffect(() => {
-    if(tasksState!==null){
+    if (tasksState !== null) {
       setTodoList(tasksState);
+      setTodos(
+        <ListView todos={todoList} removeTodo={handleComplete} completeTodo={handleClick} />
+      )
     }
   }, [tasksState]);
 
-  const handleComplete = (id) => {
-    axiosInstance({
-      url: `task/${userState.user.email}/${id}/`,
-      method: "DELETE",
-      headers: {
-        'Authorization': `token ${localStorage.getItem('token')}`
-      }
-    }).then((response) => {
-      if (response.status === 204) {
-        return axiosInstance({
-          url: `tasks/${userState.user.email}/`,
-          method: "GET",
-          headers: {
-            'Authorization': `token ${localStorage.getItem('token')}`
-          }
-        }).then((response) => {
-          const data = response.data;
-          setTodoList(data.tasks);
-        });
-      }
-    });
+  const handleComplete = async(todo) => {
+    const data = {
+      "email": userState.user.email,
+      "id": todo.id,
+    }
+    await dispatch(deleteSingleTaskAPI(data));
+    await dispatch(getTasksAPI(userState.user));
+    if (tasksState !== null) {
+      setTodoList(tasksState);
+      setTodos(
+        <ListView todos={todoList} removeTodo={handleComplete} completeTodo={handleClick} />
+      )
+    }
   }
 
-  const handleClick = (todo) => {
+  const handleClick = async(todo) => {
     const data = {
       "email": userState.user.email,
       "id": todo.id,
@@ -90,6 +92,28 @@ function Index() {
       "title": todo.title
     }
     dispatch(updateSingleTaskAPI(data));
+    if (tasksState?.lenght > 0) {
+      setTodos(
+        <ListView todos={todoList} removeTodo={handleComplete} completeTodo={handleClick} />
+      )
+    }
+  }
+
+  const addHandleClick = async() => {
+    const data = {
+      "email": userState.user.email,
+      "is_completed": false,
+      "title": value
+    }
+    await dispatch(postTaskAPI(data));
+    await dispatch(getTasksAPI(userState.user));
+    if (tasksState !== null) {
+      setTodoList(tasksState);
+      setTodos(
+        <ListView todos={todoList} removeTodo={handleComplete} completeTodo={handleClick} />
+      )
+    }
+    setValue("");
   }
 
   const todoListView = (
@@ -135,11 +159,12 @@ function Index() {
                   <h6 className='text-muted text-center'>{monthlist[month]} {date}, {year} </h6>
                   <div className='p-3'>
                     <ul className='list-group'>
-                      <ListView todos={todoList} removeTodo={handleComplete} completeTodo={handleClick}/>
+                      {/* <ListView todos={todoList} removeTodo={handleComplete} completeTodo={handleClick}/> */}
+                      {todos}
                     </ul>
                     {showInputText && <div className="input-group mt-3">
                       <input type="text" value={value} className="form-control text-dark" placeholder="Enter here..." aria-describedby="button-addon2" onChange={(e) => setValue(e.target.value)} />
-                      <button className="btn" type="button" onClick={() => handleClick()}><SendFill className='global-icons-color' /></button>
+                      <button className="btn" type="button" onClick={() => addHandleClick()}><SendFill className='global-icons-color' /></button>
                     </div>}
                   </div>
                 </div>
