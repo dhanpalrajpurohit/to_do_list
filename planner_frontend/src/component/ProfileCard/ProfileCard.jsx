@@ -3,18 +3,13 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 
 import "./ProfileCard.css";
-import {updateUserProfileAPI, getProfileAPI} from "../../store/services/authentication";
+import { updateUserProfileAPI, getProfileAPI } from "../../store/services/authentication";
 
 function ProfileCard(props) {
+    const user = useSelector(state => state.user.data);
     const dispatch = useDispatch();
-    const [formData, setFormData] = useState({"name": null, "email": props.userdetail.email});
+    const [formData, setFormData] = useState({ "name": null, "email": props.userdetail.email });
 
-    const submitHandler = () => {
-        debugger;
-        dispatch(updateUserProfileAPI(formData));
-        dispatch(getProfileAPI());
-    }
-    
     return (
         <div className='profile'>
             <div className="row">
@@ -26,16 +21,16 @@ function ProfileCard(props) {
                                 <div className='w-100'>
                                     <img class="rounded-circle mx-auto d-block" src={`http://localhost:8000${props.userdetail.profile_picture}`} alt="profile" height={100} />
                                 </div>
-                                <h6 className='text-muted text-center'>{props.userdetail.name}</h6>
+                                <h6 className='text-muted text-center'>{user?.name}</h6>
                                 <div className='p-3'>
-                                    <form class="form-inline text-dark" onSubmit={submitHandler}>
+                                    <form class="form-inline text-dark" onSubmit={(e) => props.userSubmitHandler(e, formData)}>
                                         <div class="form-group m-3">
                                             <label for="formGroupExampleInput">Name</label>
-                                            <input type="text" class="form-control mb-2 text-dark" id="formGroupExampleInput" placeholder="Example input" defaultValue={props.userdetail.name} onChange={(e)=>setFormData({"email": props.userdetail.email, "name":e.target.value})}/>
+                                            <input type="text" class="form-control mb-2 text-dark" id="formGroupExampleInput" placeholder="Example input" defaultValue={user.name} onChange={(e) => setFormData({ ...formData, "name": e.target.value })} />
                                         </div>
                                         <div class="form-group m-3">
                                             <label for="formGroupExampleInput">Email Address</label>
-                                            <input type="text"  disabled={true} class="form-control text-dark" id="formGroupExampleInput" placeholder="Example input" defaultValue={props.userdetail.email} />
+                                            <input type="text" disabled={true} class="form-control text-dark" id="formGroupExampleInput" placeholder="Example input" defaultValue={user.email} />
                                         </div>
                                         <button type="submit" disabled={!formData.name} class="btn btn-primary m-3">Submit</button>
                                     </form>

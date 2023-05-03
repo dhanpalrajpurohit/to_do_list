@@ -50,7 +50,8 @@ export const getProfileAPI = createAsyncThunk("getProfileUser", async (thunkAPI)
             'Authorization': `Token ${localStorage.getItem('token')}`
         },
     });
-    return response.data;
+    const res = await response.data;
+    return res;
 });
 
 export const updateUserProfileAPI = createAsyncThunk("userProfileUser", async (data, thunkAPI) => {
@@ -63,8 +64,8 @@ export const updateUserProfileAPI = createAsyncThunk("userProfileUser", async (d
         },
         data: data,
     });
-    
-    return await response.data;
+    const res = await response.data;
+    return res;
 });
 
 export const logoutAPI = () => {

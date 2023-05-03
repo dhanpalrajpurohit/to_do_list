@@ -11,37 +11,52 @@ import { updateUserProfileAPI, getProfileAPI } from '../../store/services/authen
 
 function Profile() {
     const dispatch = useDispatch();
-    const data = useSelector((state) =>state.user.data);;
+    const data = useSelector((state) => state.user.data);
     const [user, setUser] = useState({ "name": null, "email": null, "profile_picture": null });
-    const [formData, setFormData] = useState({"name": null, "email": user.email});
+    const [formData, setFormData] = useState({ "name": null, "email": null });
+    const [profile, setProfile] = useState();
+
+    useEffect(()=>{
+        setProfile(<ProfileCard userdetail={user} userSubmitHandler={submitHandler}/>);
+    },[])
 
     useEffect(() => {
         dispatch(getProfileAPI());
-      }, [dispatch]);
+    }, [dispatch]);
 
-      useEffect(() => {
+    useEffect(() => {
         if (data !== null && data !== undefined) {
-          const updatedUser = {
+            const updatedUser = {
+                "name": data.user.name,
+                "email": data.user.email,
+                "profile_picture": data.user.profile_picture,
+            };
+            setUser(updatedUser);
+        }
+    }, [data]);
+
+    const submitHandler = async (e, formdata) => {
+        e.preventDefault();
+        setFormData(formdata);
+        await dispatch(updateUserProfileAPI(formdata));
+        await dispatch(getProfileAPI());
+        const updatedUser = {
             "name": data.user.name,
             "email": data.user.email,
             "profile_picture": data.user.profile_picture,
-          };
-          setUser(updatedUser);
-        }
-      }, [data]);
-
-    const submitHandler = async(e) => {
-        e.preventDefault();
-        dispatch(updateUserProfileAPI(formData));
-        dispatch(getProfileAPI());
-        setFormData({"name": null, "email": user.email});
-        setUser(data.user);
+        };
+        setUser(updatedUser);
+        console.log(user);
+        setProfile(
+            <ProfileCard userdetail={user} userSubmitHandler={submitHandler} />
+        );
     }
 
     return (
         <div>
             <Header userdetail={user} />
-            <div className='profile'>
+            {profile}
+            {/* <div className='profile'>
                 <div className="row">
                     <div className="col-sm-6 text-white mx-auto m-3">
                         <div className="container">
@@ -70,7 +85,7 @@ function Profile() {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> */}
         </div>
     )
 }
