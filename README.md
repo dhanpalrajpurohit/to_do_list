@@ -1,4 +1,7 @@
 ## Todo List 
+### Demo Video
+Uploading Todo Demo Video.mp4…
+
 #### Setup the Application
 
 1. Setup the backend to visit the planner_backend and follow the README.md
