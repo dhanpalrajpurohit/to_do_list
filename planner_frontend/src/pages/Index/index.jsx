@@ -7,7 +7,6 @@ import './index.css';
 import Header from '../../component/header/Header';
 import ListView from '../../component/ListView/ListView';
 
-import { axiosInstance } from '../../Axios.jsx';
 import { getProfileAPI } from "../../store/services/authentication";
 import { getTasksAPI, updateSingleTaskAPI, postTaskAPI, deleteSingleTaskAPI } from "../../store/services/task";
 
@@ -70,6 +69,7 @@ function Index() {
   }, [tasksState]);
 
   const handleComplete = async(todo) => {
+    console.log(todo);
     const data = {
       "email": userState.user.email,
       "id": todo.id,
@@ -116,36 +116,6 @@ function Index() {
     setValue("");
   }
 
-  const todoListView = (
-    todoList !== null && todoList !== [] && todoList.map((todo, index) => {
-      return (
-        <li key={index} className="row shadow-sm">
-          <div className="form-check col-9 m-3">
-            {
-              todo.is_completed &&
-              (<div>
-                <input className="form-check-input pt-1" type="checkbox" checked id="flexCheckDefault" onClick={() => handleClick(todo)} />
-                <label className="form-check-label pt-1 card-subtitle form-check-label border-0 text-dark strikeThrough" htmlFor="flexCheckDefault">
-                  {todo.title}
-                </label>
-              </div>)
-            }
-            {
-              !todo.is_completed &&
-              (<div>
-                <input className="form-check-input pt-1" type="checkbox" id="flexCheckDefault" onClick={() => handleClick(todo)} />
-                <label className="form-check-label pt-1 card-subtitle form-check-label border-0 text-dark" htmlFor="flexCheckDefault">
-                  {todo.title}
-                </label>
-              </div>)
-            }
-          </div>
-          <button className='btn justify-content-right col-auto' onClick={() => handleComplete(todo.id)}><Trash2Fill className='global-icons-color' /></button>
-        </li>
-      )
-    })
-  )
-
   return (
     <div>
       <Header />
@@ -159,7 +129,6 @@ function Index() {
                   <h6 className='text-muted text-center'>{monthlist[month]} {date}, {year} </h6>
                   <div className='p-3'>
                     <ul className='list-group'>
-                      {/* <ListView todos={todoList} removeTodo={handleComplete} completeTodo={handleClick}/> */}
                       {todos}
                     </ul>
                     {showInputText && <div className="input-group mt-3">

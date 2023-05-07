@@ -41,7 +41,7 @@ function ListView({ todos, removeTodo, completeTodo }) {
                         </div>) 
                     }
                 </div>
-                <button className='btn justify-content-right col-auto' onClick={(e) => removeTodo(e, todo)}><Trash2Fill className='global-icons-color' /></button>
+                <button className='btn justify-content-right col-auto' onClick={() => removeTodo(todo)}><Trash2Fill className='global-icons-color' /></button>
             </li>
         )
     })
