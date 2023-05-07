@@ -59,9 +59,6 @@ function SignUp() {
                 <hr />
               </form>
             </div>
-            <div id="social-icons" className='d-grid gap-2 w-75'>
-              <div><button className='btn btn-lg social-icons-google w-100 rounded-pill'>Google</button></div>
-            </div>
           </div>
         </div>
       </div>
